@@ -18,4 +18,4 @@ things to change-
     better organization
     optimize ui for small displays better 
     optimize performance for less powerful devices
-    start using github
+    x start using github
