@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+  "name": "Music Visualizer for Google Play™ Music",
+  "version": "7.0",
+  "description": "Music Visualizer for Google Play Music and YouTube",
+  "web_accessible_resources": ["add.png"],
+  "icons": {                   
+    "48": "icon48.png"
+  },
+ "browser_action": {
+    "default_icon": {                   
+      "48": "icon48.png"    
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://play.google.com/music/*" , "https://www.youtube.com/*", "https://music.youtube.com/*"],
+      "js": ["visualizer.js"]
+    }
+  ]
+
+  
+}
