@@ -6,9 +6,9 @@
 
 var showMenu = 0;
 var addModImg=chrome.extension.getURL('add.png');
-var vizBttnImg=chrome.extension.getURL('viz.png');
-var mobiBttnImg=chrome.extension.getURL('mobi.png');
-var fxBttnImg=chrome.extension.getURL('fx.png');
+//var vizBttnImg=chrome.extension.getURL('viz.png');
+//var mobiBttnImg=chrome.extension.getURL('mobi.png');
+//var fxBttnImg=chrome.extension.getURL('fx.png');
 
 var site="";
 var uiDis=-1;
