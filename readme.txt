@@ -8,7 +8,7 @@ Current Relase Version: 7.0
 
 developer Notes:
 things to change-
-    menue button change in functionality and design (too annyoing espically in youtube)
+    menu button change in functionality and design (too annyoing espically in youtube)
     cycle visualizer key binding
     audio source finder
     code that cycles through the visualizers
