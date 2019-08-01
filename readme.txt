@@ -18,4 +18,6 @@ things to change-
     better organization
     optimize ui for small displays better 
     optimize performance for less powerful devices
+    make less dependent on knowing which website the extension is loaded on top of
+    add a test website to run tests quicker
     x start using github
