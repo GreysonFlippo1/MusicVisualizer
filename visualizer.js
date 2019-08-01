@@ -1,7 +1,7 @@
 //Greyson Flippo 
 //Ac130veterans@gmail.com
 //created 6-6-2016 :)
-//updated 6-9-2020
+//updated 8-1-2020
 //https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
 var showMenu = 0;
@@ -577,7 +577,7 @@ function getAudioId()
  document.getElementById('canvas1').setAttribute('width', window.innerWidth);
  document.getElementById('canvas1').setAttribute('height', window.innerHeight-90-uiDis);
  document.getElementById('canvas1').style.display="none";
- document.getElementById('canvas1').style.backgroundColor="rgba(0,0,0,1)";;
+ document.getElementById('canvas1').style.backgroundColor="rgba(0,0,0,1)";
 
 //creates ambience cover and it's assets
  var ambience1=document.createElement('div');
@@ -889,7 +889,7 @@ function waveVis()
  else{canvasCtx.lineTo(window.innerWidth, window.innerHeight/2);}
  canvasCtx.stroke();
  setTimeout(function(){canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);},1);
- };
+ }
 draw();
 }
 
