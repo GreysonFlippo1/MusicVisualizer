@@ -1,7 +1,7 @@
 //Greyson Flippo 
 //Ac130veterans@gmail.com
 //created 6-6-2016 :)
-//updated 8-1-2020
+//updated 8-5-2020
 //https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
 var showMenu = 0;
@@ -778,7 +778,7 @@ function waveVis() {
 
 
   function draw() {
-    if (site == "youtube") { document.getElementById("content").onload = function () { console.log("update"); } }
+    if (site == "youtube") { document.getElementById("content").onload = function () { console.log("updating visualizer"); } }
     if (red == 255 && colorCycle == 1) {
       if (blue > 0) { blue--; }
       else { green++ }
