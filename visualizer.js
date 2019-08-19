@@ -1,14 +1,12 @@
 //Greyson Flippo 
 //Ac130veterans@gmail.com
+//GreysonFlippo@gmail.com
 //created 6-6-2016 :)
-//updated 8-5-2020
+//updated 8-14-2020
 //https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
 var showMenu = 0;
 var addModImg = chrome.extension.getURL('add.png');
-//var vizBttnImg=chrome.extension.getURL('viz.png');
-//var mobiBttnImg=chrome.extension.getURL('mobi.png');
-//var fxBttnImg=chrome.extension.getURL('fx.png');
 
 var site = "";
 var uiDis = -1;
@@ -30,6 +28,10 @@ var artSize = 1024;
 setTimeout(loaded, 100);
 
 function loaded() {
+
+  //USE CONTAINS METHOD
+
+
   var url1 = window.location.href.substring(0, 24);
 
   //window.location.href.substring(0, 29)=="https://www.youtube.com/watch"
@@ -1149,6 +1151,8 @@ function hideUI() {
   showMods();
 }
 
+
+//try to do multi-key binds - maybe have the menu only open while holding leftSift+V or something
 document.onkeydown = checkKey;
 
 function checkKey(e) {
