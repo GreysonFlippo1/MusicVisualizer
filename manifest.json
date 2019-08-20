@@ -15,6 +15,7 @@
   "content_scripts": [
     {
       "matches": ["https://play.google.com/music/*" , "https://www.youtube.com/*", "https://music.youtube.com/*"],
+      "css":["visualizerCSS.css"],
       "js": ["visualizer.js"]
     }
   ]

@@ -5,6 +5,8 @@
 //updated 8-14-2020
 //https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
+
+//change vars to lets and consts, and organize them. There are more global variables throught the code
 var showMenu = 0;
 var addModImg = chrome.extension.getURL('add.png');
 
@@ -1153,6 +1155,7 @@ function hideUI() {
 
 
 //try to do multi-key binds - maybe have the menu only open while holding leftSift+V or something
+//could make an array of keys pressed and keys lifted
 document.onkeydown = checkKey;
 
 function checkKey(e) {
