@@ -267,7 +267,7 @@ function waveVis() {
   let canvasCtx = document.getElementById('canvas1').getContext("2d");
   let WIDTH = window.innerWidth;
   let HEIGHT = window.innerHeight - websiteConfig.bottom;
-    if (websiteConfig.name == "YouTube-Config") { document.getElementById("content").onload = function () { console.log("updating visualizer"); } }
+    if (websiteConfig.name == "YouTube-Config") { document.getElementById("content").onload = function () { console.log("Music Visualizer: YouTube"); } }
     if (red == 255){
       if (blue > 0) { blue--; }
       else { green++ }
