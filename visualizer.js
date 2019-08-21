@@ -228,11 +228,9 @@ function toggleBarVis(){
 }
 
 
-let runWaveVisualizer;
 let isWaveVisualizerRunning = false;
-
-let runCirlceVisualizer;
 let isCircleVisualizerRunning = false;
+
 
 let red = 255;
 let green = 0;
@@ -243,12 +241,11 @@ function toggleWaveViz(){
   if(isWaveVisualizerRunning == false){
     document.getElementById('canvas1').style.display="block";
     isWaveVisualizerRunning = true;
-    runWaveVisualizer=setInterval(waveVis,1);
+    window.requestAnimationFrame(waveVis);
   }
   else{
     document.getElementById('canvas1').style.display="none";
     isWaveVisualizerRunning = false;
-    clearInterval(runWaveVisualizer);
   }
 }
 
@@ -257,16 +254,16 @@ function toggleCircleViz(){
   if(isCircleVisualizerRunning == false){
     document.getElementById('canvas1').style.display="block";
     isCircleVisualizerRunning = true;
-    runCircleVisualizer=setInterval(waveVis,1);
+    window.requestAnimationFrame(waveVis);
   }
   else{
     document.getElementById('canvas1').style.display="none";
     isCircleVisualizerRunning = false;
-    clearInterval(runCircleVisualizer);
   }
 }
 
 function waveVis() {
+  console.log("running");
   let canvasCtx = document.getElementById('canvas1').getContext("2d");
   let WIDTH = window.innerWidth;
   let HEIGHT = window.innerHeight - websiteConfig.bottom;
@@ -330,6 +327,7 @@ function waveVis() {
     if (isCircleVisualizerRunning) { canvasCtx.lineTo(lastx, lasty); }
     else { canvasCtx.lineTo(window.innerWidth, window.innerHeight / 2); }
     canvasCtx.stroke();
+    if(isCircleVisualizerRunning || isWaveVisualizerRunning){window.requestAnimationFrame(waveVis);}
 }
 
 
@@ -344,8 +342,8 @@ function checkKey(e) {
   //on 'esc' click
   if (e.keyCode == '27') {
     //toggleBarVis();
-    //toggleWaveViz();
-    toggleCircleViz();
+    toggleWaveViz();
+    //toggleCircleViz();
   }
   //on'`' click
   if (e.keyCode == '192') {
