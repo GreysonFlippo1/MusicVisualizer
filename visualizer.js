@@ -342,7 +342,7 @@ function checkKey(e) {
   //on 'esc' click
   if (e.keyCode == '27') {
     //toggleBarVis();
-    toggleWaveViz();
+    //toggleWaveViz();
     //toggleCircleViz();
   }
   //on'`' click
