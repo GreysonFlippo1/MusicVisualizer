@@ -1,3 +1,21 @@
 /*
 put css in here to reduce the amout of dom manipulation in the js file
 */
+#Activate_Button{
+    position: fixed;
+    z-index: 1600;
+    width:150px;
+    height:150px;
+    background-color: #FF5722;
+    border-radius: 50%;
+    bottom:200px;
+    left:45%;
+    transition:box-shadow .1s;
+    display: none;
+}
+
+
+.Button:hover{
+    cursor:pointer;
+    box-shadow: 0 0 6px 6px rgba(0,0,0,0.2);
+}

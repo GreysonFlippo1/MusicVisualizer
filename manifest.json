@@ -14,7 +14,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*" , "https://play.google.com/music/*" , "https://www.youtube.com/*", "https://music.youtube.com/*"],
+      "matches": ["<all_urls>" , "https://play.google.com/music/*" , "https://www.youtube.com/*", "https://music.youtube.com/*"],
       "css":["visualizerCSS.css"],
       "js": ["visualizer.js"]
     }
