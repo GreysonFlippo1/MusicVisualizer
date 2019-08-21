@@ -19,3 +19,23 @@ put css in here to reduce the amout of dom manipulation in the js file
     cursor:pointer;
     box-shadow: 0 0 6px 6px rgba(0,0,0,0.2);
 }
+
+.bars{
+    width:12px;
+    height:0px;
+    position: fixed;
+    bottom:90px;
+    background-color: #FF5722;
+    z-index: 1502;
+    opacity: 0.8;
+}
+
+#canvas1{
+    z-index: 1502;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color:black;
+    width:100%;
+    display: none;
+}
