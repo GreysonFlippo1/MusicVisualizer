@@ -1,24 +1,61 @@
 /*
 put css in here to reduce the amout of dom manipulation in the js file
 */
-#Activate_Button{
+#Menu_Background{
     position: fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    height: 100%;
     z-index: 1600;
-    width:150px;
-    height:150px;
-    background-color: #FF5722;
-    border-radius: 50%;
-    bottom:200px;
-    left:45%;
-    transition:box-shadow .1s;
-    display: none;
+    background-color: rgba(0,0,0,0.8);
+    display:none;
 }
 
+
+#Menu_Container{
+    position: fixed;
+    width:1200px;
+    height:300px;
+    bottom:55%;
+    left:300px;
+    display: flex;
+    flex-direction: row;
+    box-shadow:0px 0px 4px 4px rgba(80,80,80,0.1);
+}
+
+#Audio_Source_Identifier_Container{
+    position: fixed;
+    width: 1170px;
+    height:45px;
+    bottom:45%;
+    left:300px;
+    box-shadow:0px 0px 4px 4px rgba(80,80,80,0.1);
+    background-color: rgba(10,10,10,0.95);
+    color:#aaaaaa;
+    font-family: sans-serif;
+    font-size: 30px;
+    padding-left:30px;
+    padding-top:10px;
+}
+
+.Button{
+    width:300px;
+    height:100%;
+    background-color: rgba(10,10,10,0.95);
+    transition:background-color .2s;
+    border-top: rgba(0,0,0,0) 4px solid;
+}
 
 .Button:hover{
+    background-color: rgba(80,80,80,0.95);
     cursor:pointer;
-    box-shadow: 0 0 6px 6px rgba(0,0,0,0.2);
 }
+
+.Button_Selected{
+    border-top: #FF5722 4px solid;
+}
+
 
 .bars{
     width:12px;

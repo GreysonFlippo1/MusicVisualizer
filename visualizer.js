@@ -7,7 +7,9 @@
 
 let showLogs = false;
 
-const Resources_Add_Button_Image = chrome.extension.getURL('add.png');
+let bar_visualizer_image = chrome.extension.getURL('Bar_Viz.png');
+let wave_visualizer_image = chrome.extension.getURL('Wave_Viz.png');
+let circle_visualizer_image = chrome.extension.getURL('Circle_Viz.png');
 
 let websiteConfig={
   name:"Default-Config",
@@ -17,6 +19,16 @@ let websiteConfig={
 };
 
 let mediaElements = [];
+//                      bar ,wave,circle
+let visualizerToggles=[false,false,false];
+let visualizerToggleFunctions=[toggleBarVis,toggleWaveViz,toggleCircleViz];
+
+    //toggleBarVis();
+    //toggleWaveViz();
+    //toggleCircleViz();
+
+let runBarVisualizer;
+let drawBarsUpdate;
 
 setTimeout(loaded, 100);
 
@@ -72,19 +84,39 @@ function getCurrentPage(url){
 
 
 function createElements(){
-  document.body.appendChild(document.createElement('img')).id = 'Activate_Button';
-  document.getElementById('Activate_Button').classList.add("Button");
-  document.getElementById('Activate_Button').src = Resources_Add_Button_Image;
-  document.getElementById('Activate_Button').addEventListener("click", ()=>{alert("clicked")});
-  /*showLogs*/if(showLogs){console.log("menu button spawned")};
+  document.body.appendChild(document.createElement('div')).id = 'Menu_Background';
+  document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Menu_Container';
+  document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Audio_Source_Identifier_Container';
+
+  document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Bar_Visualizer_Button';
+  document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Wave_Visualizer_Button';
+  document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Circle_Visualizer_Button';
+  document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Ambient_Visualizer_Button';
+
+  document.getElementById('Bar_Visualizer_Button').classList.add("Button");
+  document.getElementById('Bar_Visualizer_Button').style.backgroundImage="url('"+bar_visualizer_image+"')";
+  //document.getElementById('Bar_Visualizer_Button').classList.add("Button_Selected");
+  document.getElementById('Bar_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(0)});
+
+  document.getElementById('Wave_Visualizer_Button').classList.add("Button");
+  document.getElementById('Wave_Visualizer_Button').style.backgroundImage="url('"+wave_visualizer_image+"')";
+  document.getElementById('Wave_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(1)});
+
+  document.getElementById('Circle_Visualizer_Button').classList.add("Button");
+  document.getElementById('Circle_Visualizer_Button').style.backgroundImage="url('"+circle_visualizer_image+"')";
+  document.getElementById('Circle_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(2)});
+
+  document.getElementById('Ambient_Visualizer_Button').classList.add("Button");
+  //document.getElementById('Bar_Visualizer_Button').classList.add("Button");
+  //document.getElementById('Bar_Visualizer_Button').addEventListener("click", ()=>{alert("clicked")});
+  /*showLogs*/if(showLogs){console.log("menu spawned")};
 
   document.body.appendChild(document.createElement('canvas')).id="canvas1";
 }
 
 
 function updateGUI(){
-  document.getElementById('Activate_Button').style.backgroundColor = websiteConfig.color;
-  document.getElementById('Activate_Button').style.left = (window.innerWidth-150)/2 + "px";
+  document.getElementById('Audio_Source_Identifier_Container').innerText=mediaElements.length + " Audio Sources Connected";
   document.getElementById('canvas1').setAttribute('height', window.innerHeight - websiteConfig.bottom);
   document.getElementById('canvas1').setAttribute('width', window.innerWidth);
 }
@@ -183,9 +215,6 @@ function removeBars(){
   barAmnt=0;
 }
 
-let runBarVisualizer;
-let drawBarsUpdate;
-let isBarVisualizerRunning = false;
 
 function barVis()
 {
@@ -213,57 +242,51 @@ function barVis()
 }
 
 function toggleBarVis(){
-  if(isBarVisualizerRunning == false){
+  if(visualizerToggles[0] == false){
     drawBars();
-    isBarVisualizerRunning = true;
+    visualizerToggles[0] = true;
     runBarVisualizer=setInterval(barVis,1);
     drawBarsUpdate=setInterval(drawBars,500);
   }
   else{
     clearInterval(drawBarsUpdate);
     clearInterval(runBarVisualizer);
-    isBarVisualizerRunning = false;
+    visualizerToggles[0] = false;
     removeBars();
   }
 }
 
+function toggleWaveViz(){
+  if(visualizerToggles[1] == false){
+    document.getElementById('canvas1').style.display="block";
+    visualizerToggles[1] = true;
+    window.requestAnimationFrame(waveVis);
+  }
+  else{
+    document.getElementById('canvas1').style.display="none";
+    visualizerToggles[1] = false;
+  }
+}
 
-let isWaveVisualizerRunning = false;
-let isCircleVisualizerRunning = false;
+function toggleCircleViz(){
+  if(visualizerToggles[2] == false){
+    document.getElementById('canvas1').style.display="block";
+    visualizerToggles[2] = true;
+    window.requestAnimationFrame(waveVis);
+  }
+  else{
+    document.getElementById('canvas1').style.display="none";
+    visualizerToggles[2] = false;
+  }
+}
+
 
 
 let red = 255;
 let green = 0;
 let blue = 0;
 
-
-function toggleWaveViz(){
-  if(isWaveVisualizerRunning == false){
-    document.getElementById('canvas1').style.display="block";
-    isWaveVisualizerRunning = true;
-    window.requestAnimationFrame(waveVis);
-  }
-  else{
-    document.getElementById('canvas1').style.display="none";
-    isWaveVisualizerRunning = false;
-  }
-}
-
-
-function toggleCircleViz(){
-  if(isCircleVisualizerRunning == false){
-    document.getElementById('canvas1').style.display="block";
-    isCircleVisualizerRunning = true;
-    window.requestAnimationFrame(waveVis);
-  }
-  else{
-    document.getElementById('canvas1').style.display="none";
-    isCircleVisualizerRunning = false;
-  }
-}
-
 function waveVis() {
-  console.log("running");
   let canvasCtx = document.getElementById('canvas1').getContext("2d");
   let WIDTH = window.innerWidth;
   let HEIGHT = window.innerHeight - websiteConfig.bottom;
@@ -292,7 +315,7 @@ function waveVis() {
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
     canvasCtx.strokeStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
     canvasCtx.lineWidth = 1.3;
-    if (isCircleVisualizerRunning) { canvasCtx.lineWidth = 3; }
+    if (visualizerToggles[2]) { canvasCtx.lineWidth = 3; }
     canvasCtx.beginPath();
     let sliceWidth = 1;
     let radius1 = HEIGHT / 2 - 300;
@@ -304,7 +327,7 @@ function waveVis() {
       let v = mediaElements[activeSource].dataArray[i] / 128.0;
       let radius2 = radius1 + (v * v * 150);
       let y = v * HEIGHT / 2;
-      if (isCircleVisualizerRunning) {
+      if (visualizerToggles[2]) {
         if (i === 0) {
           canvasCtx.moveTo((WIDTH / 2) + radius2 * Math.cos(i * (2 * Math.PI) / mediaElements[activeSource].bufferLength), (HEIGHT / 2) + radius2 * Math.sin(i * (2 * Math.PI) / mediaElements[activeSource].bufferLength) * -1);
         }
@@ -324,12 +347,36 @@ function waveVis() {
       lasty = (HEIGHT / 2) + radius2 * Math.sin(i * (2 * Math.PI) / mediaElements[activeSource].bufferLength) * -1;
       x += sliceWidth;
     }
-    if (isCircleVisualizerRunning) { canvasCtx.lineTo(lastx, lasty); }
+    if (visualizerToggles[2]) { canvasCtx.lineTo(lastx, lasty); }
     else { canvasCtx.lineTo(window.innerWidth, window.innerHeight / 2); }
     canvasCtx.stroke();
-    if(isCircleVisualizerRunning || isWaveVisualizerRunning){window.requestAnimationFrame(waveVis);}
+    if(visualizerToggles[2] || visualizerToggles[1]){window.requestAnimationFrame(waveVis);}
 }
 
+
+function toggleMenu(){
+  if(document.getElementById('Menu_Background').style.display == "block"){
+    document.getElementById('Menu_Background').style.display = "none";
+  }
+  else{
+    document.getElementById('Menu_Background').style.display = "block";
+  }
+}
+
+function setActiveVisualizer(vizNum){
+  if(!visualizerToggles[vizNum]){
+    turnOffAllVisualizers();
+  }
+  visualizerToggleFunctions[vizNum]();
+}
+
+function turnOffAllVisualizers(){
+  for(let i = 0; i < visualizerToggles.length; i++){
+    if(visualizerToggles[i]){
+      visualizerToggleFunctions[i]();
+    }
+  }
+}
 
 
 
@@ -344,9 +391,11 @@ function checkKey(e) {
     //toggleBarVis();
     //toggleWaveViz();
     //toggleCircleViz();
+    toggleMenu();
   }
   //on'`' click
   if (e.keyCode == '192') {
+    turnOffAllVisualizers();
   }
 }
 
