@@ -372,13 +372,17 @@ function setActiveVisualizer(vizNum){
   if(!visualizerToggles[vizNum]){
     turnOffAllVisualizers();
   }
-  visualizerToggleFunctions[vizNum]();
+  if(mediaElements.length>0){
+    visualizerToggleButtons[vizNum].classList.toggle("Button_Selected");
+    visualizerToggleFunctions[vizNum]();
+  };
 }
 
 function turnOffAllVisualizers(){
   for(let i = 0; i < visualizerToggles.length; i++){
     if(visualizerToggles[i]){
       visualizerToggleFunctions[i]();
+      visualizerToggleButtons[i].classList.toggle("Button_Selected");
     }
   }
 }

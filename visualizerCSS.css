@@ -43,6 +43,7 @@ put css in here to reduce the amout of dom manipulation in the js file
     background-color: rgba(10,10,10,0.95);
     transition:background-color .2s;
     border-top: rgba(0,0,0,0) 4px solid;
+    background-size: 100% 100%;
 }
 
 .Button:hover{
@@ -73,4 +74,28 @@ put css in here to reduce the amout of dom manipulation in the js file
     background-color:black;
     width:100%;
     display: none;
+}
+
+
+@media screen and (max-width: 1200px) {
+    #Menu_Container{
+        width:600px;
+        height:150px;
+    }
+    .Button{
+        width:150px;
+    }
+
+#Audio_Source_Identifier_Container{
+    width: 585px;
+    height:23px;
+    box-shadow:0px 0px 4px 4px rgba(80,80,80,0.1);
+    background-color: rgba(10,10,10,0.95);
+    color:#aaaaaa;
+    font-family: sans-serif;
+    font-size: 15px;
+    padding-left:15px;
+    padding-top:5px;
+    }
+
 }
