@@ -182,7 +182,6 @@ function findActiveAudioSource(){
 
 let barWidth = 12;
 let barAmnt = 0;
-let vizReady = 0;
 let barSpacing = 2;
 
 function drawBars() {
@@ -209,7 +208,6 @@ function drawBars() {
   }
 
   barAmnt = barAmntTemp;
-  vizReady = barAmnt;
 }
 
 function removeBars(){
