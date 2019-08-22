@@ -22,6 +22,7 @@ let mediaElements = [];
 //                      bar ,wave,circle
 let visualizerToggles=[false,false,false];
 let visualizerToggleFunctions=[toggleBarVis,toggleWaveViz,toggleCircleViz];
+let visualizerToggleButtons=[];
 
     //toggleBarVis();
     //toggleWaveViz();
@@ -111,6 +112,8 @@ function createElements(){
   //document.getElementById('Bar_Visualizer_Button').classList.add("Button");
   //document.getElementById('Bar_Visualizer_Button').addEventListener("click", ()=>{alert("clicked")});
   /*showLogs*/if(showLogs){console.log("menu spawned")};
+
+  visualizerToggleButtons=[document.getElementById('Bar_Visualizer_Button'),document.getElementById('Wave_Visualizer_Button'),document.getElementById('Circle_Visualizer_Button')];
 
   document.body.appendChild(document.createElement('canvas')).id="canvas1";
 }
