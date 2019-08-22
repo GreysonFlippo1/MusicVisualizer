@@ -86,6 +86,7 @@ function getCurrentPage(url){
 function createElements(){
   document.body.appendChild(document.createElement('div')).id = 'Menu_Background';
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Menu_Container';
+  //document.getElementById('Menu_Background').addEventListener("click", ()=>{toggleMenu()});
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Audio_Source_Identifier_Container';
 
   document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Bar_Visualizer_Button';
@@ -116,7 +117,7 @@ function createElements(){
 
 
 function updateGUI(){
-  document.getElementById('Audio_Source_Identifier_Container').innerText=mediaElements.length + " Audio Sources Connected";
+  document.getElementById('Audio_Source_Identifier_Container').innerText=mediaElements.length + " Audio Source(s) Connected";
   document.getElementById('canvas1').setAttribute('height', window.innerHeight - websiteConfig.bottom);
   document.getElementById('canvas1').setAttribute('width', window.innerWidth);
 }
@@ -355,11 +356,11 @@ function waveVis() {
 
 
 function toggleMenu(){
-  if(document.getElementById('Menu_Background').style.display == "block"){
+  if(document.getElementById('Menu_Background').style.display == "flex"){
     document.getElementById('Menu_Background').style.display = "none";
   }
   else{
-    document.getElementById('Menu_Background').style.display = "block";
+    document.getElementById('Menu_Background').style.display = "flex";
   }
 }
 

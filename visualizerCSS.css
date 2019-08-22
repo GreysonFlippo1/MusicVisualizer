@@ -9,27 +9,25 @@ put css in here to reduce the amout of dom manipulation in the js file
     height: 100%;
     z-index: 1600;
     background-color: rgba(0,0,0,0.8);
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
     display:none;
 }
 
 
 #Menu_Container{
-    position: fixed;
     width:1200px;
     height:300px;
-    bottom:55%;
-    left:300px;
     display: flex;
     flex-direction: row;
     box-shadow:0px 0px 4px 4px rgba(80,80,80,0.1);
+    margin-bottom:20px;
 }
 
 #Audio_Source_Identifier_Container{
-    position: fixed;
     width: 1170px;
     height:45px;
-    bottom:45%;
-    left:300px;
     box-shadow:0px 0px 4px 4px rgba(80,80,80,0.1);
     background-color: rgba(10,10,10,0.95);
     color:#aaaaaa;
