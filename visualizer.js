@@ -95,6 +95,8 @@ function createElements(){
   document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Circle_Visualizer_Button';
   document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Ambient_Visualizer_Button';
 
+  visualizerToggleButtons=[document.getElementById('Bar_Visualizer_Button'),document.getElementById('Wave_Visualizer_Button'),document.getElementById('Circle_Visualizer_Button')];
+
   document.getElementById('Bar_Visualizer_Button').classList.add("Button");
   document.getElementById('Bar_Visualizer_Button').style.backgroundImage="url('"+bar_visualizer_image+"')";
   //document.getElementById('Bar_Visualizer_Button').classList.add("Button_Selected");
@@ -112,8 +114,6 @@ function createElements(){
   //document.getElementById('Bar_Visualizer_Button').classList.add("Button");
   //document.getElementById('Bar_Visualizer_Button').addEventListener("click", ()=>{alert("clicked")});
   /*showLogs*/if(showLogs){console.log("menu spawned")};
-
-  visualizerToggleButtons=[document.getElementById('Bar_Visualizer_Button'),document.getElementById('Wave_Visualizer_Button'),document.getElementById('Circle_Visualizer_Button')];
 
   document.body.appendChild(document.createElement('canvas')).id="canvas1";
 }
@@ -183,6 +183,7 @@ function findActiveAudioSource(){
 let barWidth = 12;
 let barAmnt = 0;
 let barSpacing = 2;
+let vizReady = 0;
 
 function drawBars() {
   let barAmntTemp = 0;
@@ -208,6 +209,7 @@ function drawBars() {
   }
 
   barAmnt = barAmntTemp;
+  vizReady = barAmnt;
 }
 
 function removeBars(){
@@ -215,6 +217,7 @@ function removeBars(){
     document.getElementById('bar' + i).remove();
   }
   barAmnt=0;
+  vizReady = barAmnt;
 }
 
 
