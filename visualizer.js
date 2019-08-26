@@ -170,8 +170,8 @@ function findActiveAudioSource(){
   let max = 0;
   for(let i = 0; i < mediaElements.length; i++){
     mediaElements[i].analyser.getByteFrequencyData(mediaElements[i].frequencyData);
-    if(mediaElements[i].frequencyData[5]+mediaElements[i].frequencyData[10]>max){
-      max = mediaElements[i].frequencyData[5]+mediaElements[i].frequencyData[10];
+    if(mediaElements[i].frequencyData[10]+mediaElements[i].frequencyData[20]>max){
+      max = mediaElements[i].frequencyData[10]+mediaElements[i].frequencyData[20];
       bestSource = i;
     }
   }
