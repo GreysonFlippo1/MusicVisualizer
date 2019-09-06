@@ -21,6 +21,6 @@ things to change-
     > make less dependent on knowing which website the extension is loaded on top of
     add a test website to run tests quicker
     make some debugging functions
-    look into storage for saving settings https://developer.chrome.com/extensions/storage
-    look into meida tab capture https://developer.chrome.com/extensions/tabCapture
+    > look into storage for saving settings https://developer.chrome.com/extensions/storage
+    > look into meida tab capture https://developer.chrome.com/extensions/tabCapture
     x start using github
