@@ -2,7 +2,7 @@
 //Ac130veterans@gmail.com
 //GreysonFlippo@gmail.com
 //created 6-6-2016 :)
-//updated 8-22-2020
+//updated 9-12-2019
 //https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
 let showLogs = false;
@@ -24,12 +24,14 @@ let visualizerToggles=[false,false,false];
 let visualizerToggleFunctions=[toggleBarVis,toggleWaveViz,toggleCircleViz];
 let visualizerToggleButtons=[];
 
-    //toggleBarVis();
-    //toggleWaveViz();
-    //toggleCircleViz();
-
 let runBarVisualizer;
 let drawBarsUpdate;
+
+let options = {
+  audio:true,
+  video:false,
+};
+
 
 setTimeout(loaded, 100);
 
@@ -87,7 +89,11 @@ function getCurrentPage(url){
 function createElements(){
   document.body.appendChild(document.createElement('div')).id = 'Menu_Background';
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Menu_Container';
-  //document.getElementById('Menu_Background').addEventListener("click", ()=>{toggleMenu()});
+  document.getElementById('Menu_Background').addEventListener("click", (e)=>{
+    if(e.target.id==="Menu_Background"){
+      toggleMenu();
+    }
+  });
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Audio_Source_Identifier_Container';
 
   document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Bar_Visualizer_Button';
@@ -397,9 +403,6 @@ function checkKey(e) {
   e = e || window.event;
   //on 'esc' click
   if (e.keyCode == '27') {
-    //toggleBarVis();
-    //toggleWaveViz();
-    //toggleCircleViz();
     toggleMenu();
   }
   //on'`' click
