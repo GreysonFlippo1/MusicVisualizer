@@ -76,6 +76,54 @@ put css in here to reduce the amout of dom manipulation in the js file
     display: none;
 }
 
+#ambience1{
+    position:fixed;
+    z-index: 1502;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    display:none;
+    background-color: #000000;
+}
+
+#topGlow{
+    position: absolute;
+    z-index: 2;
+    top:-300px;
+    left: 0px;
+    width: 100%;
+    height: 0px;
+}
+
+#bottomGlow{
+    position: absolute;
+    z-index: 2;
+    bottom: -300px;
+    left:0px;
+    width:100%;
+    height: 0px;
+}
+
+#leftGlow{
+    position: absolute;
+    z-index: 2;
+    top:0px;
+    left:-300px;
+    width:0px;
+    height:100%;
+}
+
+#rightGlow{
+    position: absolute;
+    z-index: 2;
+    top:0px;
+    right:-300px;
+    width: 0px;
+    height:100%;
+}
+
+
 
 @media screen and (max-width: 1200px) {
     #Menu_Container{

@@ -10,6 +10,7 @@ let showLogs = false;
 let bar_visualizer_image = chrome.extension.getURL('Bar_Viz.png');
 let wave_visualizer_image = chrome.extension.getURL('Wave_Viz.png');
 let circle_visualizer_image = chrome.extension.getURL('Circle_Viz.png');
+let ambient_visualizer_image = chrome.extension.getURL('Ambient_Viz.png');
 
 let websiteConfig={
   name:"Default-Config",
@@ -19,19 +20,13 @@ let websiteConfig={
 };
 
 let mediaElements = [];
-//                      bar ,wave,circle
-let visualizerToggles=[false,false,false];
-let visualizerToggleFunctions=[toggleBarVis,toggleWaveViz,toggleCircleViz];
+//                      bar ,wave,circle, amb ,
+let visualizerToggles=[false,false,false,false];
+let visualizerToggleFunctions=[toggleBarVis,toggleWaveViz,toggleCircleViz,toggleAmbienceViz];
 let visualizerToggleButtons=[];
 
 let runBarVisualizer;
 let drawBarsUpdate;
-
-let options = {
-  audio:true,
-  video:false,
-};
-
 
 setTimeout(loaded, 100);
 
@@ -101,7 +96,7 @@ function createElements(){
   document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Circle_Visualizer_Button';
   document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Ambient_Visualizer_Button';
 
-  visualizerToggleButtons=[document.getElementById('Bar_Visualizer_Button'),document.getElementById('Wave_Visualizer_Button'),document.getElementById('Circle_Visualizer_Button')];
+  visualizerToggleButtons=[document.getElementById('Bar_Visualizer_Button'),document.getElementById('Wave_Visualizer_Button'),document.getElementById('Circle_Visualizer_Button'),document.getElementById('Ambient_Visualizer_Button')];
 
   document.getElementById('Bar_Visualizer_Button').classList.add("Button");
   document.getElementById('Bar_Visualizer_Button').style.backgroundImage="url('"+bar_visualizer_image+"')";
@@ -117,11 +112,18 @@ function createElements(){
   document.getElementById('Circle_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(2)});
 
   document.getElementById('Ambient_Visualizer_Button').classList.add("Button");
-  //document.getElementById('Bar_Visualizer_Button').classList.add("Button");
-  //document.getElementById('Bar_Visualizer_Button').addEventListener("click", ()=>{alert("clicked")});
+  document.getElementById('Ambient_Visualizer_Button').style.backgroundImage="url('"+ambient_visualizer_image+"')";
+  document.getElementById('Ambient_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(3)});
   /*showLogs*/if(showLogs){console.log("menu spawned")};
 
   document.body.appendChild(document.createElement('canvas')).id="canvas1";
+
+  document.body.appendChild(document.createElement('div')).id="ambience1";
+  document.getElementById('ambience1').appendChild(document.createElement('div')).id = 'topGlow';
+  document.getElementById('ambience1').appendChild(document.createElement('div')).id = 'bottomGlow';
+  document.getElementById('ambience1').appendChild(document.createElement('div')).id = 'leftGlow';
+  document.getElementById('ambience1').appendChild(document.createElement('div')).id = 'rightGlow';
+
 }
 
 
@@ -362,6 +364,37 @@ function waveVis() {
     else { canvasCtx.lineTo(window.innerWidth, window.innerHeight / 2); }
     canvasCtx.stroke();
     if(visualizerToggles[2] || visualizerToggles[1]){window.requestAnimationFrame(waveVis);}
+}
+
+
+function ambientVis()
+{
+  let activeSource = findActiveAudioSource();
+  mediaElements[activeSource].analyser.getByteFrequencyData(mediaElements[activeSource].frequencyData);
+
+  document.getElementById('ambience1').style.display = "block";
+  document.getElementById('ambience1').style.height = window.innerHeight - websiteConfig.bottom + "px";
+  document.getElementById("ambience1").style.boxShadow = "inset 0px 0px 500px rgba(255,255,255," + mediaElements[activeSource].frequencyData[2] / 255 + ")";
+
+  document.getElementById("topGlow").style.boxShadow = "0px 0px 500px 500px rgba(50,50,255," + (mediaElements[activeSource].frequencyData[8] * mediaElements[activeSource].frequencyData[8]) / (255 * 255) + ")";
+  document.getElementById("bottomGlow").style.boxShadow = "0px 0px 500px 500px rgba(255,50,50," + (mediaElements[activeSource].frequencyData[40] * mediaElements[activeSource].frequencyData[40]) / (255 * 255) + ")";
+  document.getElementById("leftGlow").style.boxShadow = "0px 0px 500px 500px rgba(50,255,50," + (mediaElements[activeSource].frequencyData[160] * mediaElements[activeSource].frequencyData[160]) / (255 * 255) + ")";
+  document.getElementById("rightGlow").style.boxShadow = "0px 0px 500px 500px rgba(255,255,50," + (mediaElements[activeSource].frequencyData[500] * mediaElements[activeSource].frequencyData[500]) / (255 * 255) + ")";
+}
+
+
+let runAmbienceVisualizer;
+
+function toggleAmbienceViz(){
+  if(visualizerToggles[3] == false){
+    visualizerToggles[3] = true;
+    runAmbienceVisualizer=setInterval(ambientVis,1);
+  }
+  else{
+    document.getElementById('ambience1').style.display = "none";
+    clearInterval(runAmbienceVisualizer);
+    visualizerToggles[3] = false;
+  }
 }
 
 

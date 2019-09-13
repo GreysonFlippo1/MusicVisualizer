@@ -3,7 +3,7 @@
   "name": "Music Visualizer for Google Play™ Music",
   "version": "8.0",
   "description": "Music Visualizer for Google Play Music and YouTube",
-  "web_accessible_resources": ["Bar_Viz.png","Wave_Viz.png","Circle_Viz.png"],
+  "web_accessible_resources": ["Bar_Viz.png","Wave_Viz.png","Circle_Viz.png","Ambient_Viz.png"],
   "icons": {                   
     "48": "icon48.png"
   },
