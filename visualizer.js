@@ -2,7 +2,7 @@
 //Ac130veterans@gmail.com
 //GreysonFlippo@gmail.com
 //created 6-6-2016 :)
-//updated 9-12-2019
+//updated 9-25-2019
 //https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
 let showLogs = false;
@@ -327,41 +327,30 @@ function waveVis() {
     canvasCtx.fillStyle = 'rgba(0, 0, 0, 0)';
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
     canvasCtx.strokeStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
-    canvasCtx.lineWidth = 1.3;
+    canvasCtx.lineWidth = 2000/window.innerHeight;
     if (visualizerToggles[2]) { canvasCtx.lineWidth = 3; }
     canvasCtx.beginPath();
-    let sliceWidth = 1;
-    let radius1 = HEIGHT / 2 - 300;
+    let sliceWidth = WIDTH/mediaElements[activeSource].bufferLength * 4;
+    let radius1 = HEIGHT / 4;
     let x = 0;
     let lastx = WIDTH / 2 + radius1;
     let lasty = HEIGHT / 2;
 
-    for (let i = 0; i < mediaElements[activeSource].bufferLength; i++) {
+    for (let i = mediaElements[activeSource].bufferLength/2; i < mediaElements[activeSource].bufferLength; i++) {
       let v = mediaElements[activeSource].dataArray[i] / 128.0;
-      let radius2 = radius1 + (v * v * 150);
+      let radius2 = radius1 + (v * v * 150) * (HEIGHT/1500);
       let y = v * HEIGHT / 2;
       if (visualizerToggles[2]) {
-        if (i === 0) {
-          canvasCtx.moveTo((WIDTH / 2) + radius2 * Math.cos(i * (2 * Math.PI) / mediaElements[activeSource].bufferLength), (HEIGHT / 2) + radius2 * Math.sin(i * (2 * Math.PI) / mediaElements[activeSource].bufferLength) * -1);
-        }
-        else {
-          canvasCtx.lineTo((WIDTH / 2) + radius2 * Math.cos(i * (2 * Math.PI) / mediaElements[activeSource].bufferLength), (HEIGHT / 2) + radius2 * Math.sin(i * (2 * Math.PI) / mediaElements[activeSource].bufferLength) * -1);
-        }
+          canvasCtx.lineTo((WIDTH / 2) + radius2 * Math.cos(i * (2 * Math.PI) / mediaElements[activeSource].bufferLength *2), (HEIGHT / 2) + radius2 * Math.sin(i * (2 * Math.PI) / mediaElements[activeSource].bufferLength *2) * -1);
       }
       else {
-        if (i === 0) {
-          canvasCtx.moveTo(x, y);
-        }
-        else {
           canvasCtx.lineTo(x, y);
-        }
       }
       lastx = (WIDTH / 2) + radius2 * Math.cos(i * (2 * Math.PI) / mediaElements[activeSource].bufferLength);
       lasty = (HEIGHT / 2) + radius2 * Math.sin(i * (2 * Math.PI) / mediaElements[activeSource].bufferLength) * -1;
       x += sliceWidth;
     }
     if (visualizerToggles[2]) { canvasCtx.lineTo(lastx, lasty); }
-    else { canvasCtx.lineTo(window.innerWidth, window.innerHeight / 2); }
     canvasCtx.stroke();
     if(visualizerToggles[2] || visualizerToggles[1]){window.requestAnimationFrame(waveVis);}
 }
@@ -430,18 +419,72 @@ function turnOffAllVisualizers(){
 
 //try to do multi-key binds - maybe have the menu only open while holding leftSift+V or something
 //could make an array of keys pressed and keys lifted
-document.onkeydown = checkKey;
 
-function checkKey(e) {
-  e = e || window.event;
-  //on 'esc' click
-  if (e.keyCode == '27') {
+let keysPressed = [];
+
+document.onkeydown = keyPressed;
+document.onkeyup = keyReleased;
+
+function keyPressed(e) {
+  // 27 = esc
+  // 192 = `
+  // 17 = control
+  // 32 = space
+  // 86 = v
+
+  let secondaryKey = 17
+  let openVisualizerKey = 86;
+  let escapeKey = 27;
+  let devKey = 192;
+
+  let viz1Key = 49;
+  let viz2Key = 50;
+  let viz3Key = 51;
+  let viz4Key = 52;
+
+
+  if(keysPressed.length==0 || keysPressed[keysPressed.length-1]!=e.keyCode){
+    keysPressed.push(e.keyCode);
+  }
+
+  if(keysPressed.includes(secondaryKey) && keysPressed.includes(openVisualizerKey)){
     toggleMenu();
   }
-  //on'`' click
-  if (e.keyCode == '192') {
+
+  if(keysPressed.includes(secondaryKey) && keysPressed.includes(viz1Key)){
+    turnOffAllVisualizers();
+    visualizerToggleFunctions[0]();
+  }
+
+  if(keysPressed.includes(secondaryKey) && keysPressed.includes(viz2Key)){
+    turnOffAllVisualizers();
+    visualizerToggleFunctions[1]();
+  }
+
+  if(keysPressed.includes(secondaryKey) && keysPressed.includes(viz3Key)){
+    turnOffAllVisualizers();
+    visualizerToggleFunctions[2]();
+  }
+
+  if(keysPressed.includes(secondaryKey) && keysPressed.includes(viz4Key)){
+    turnOffAllVisualizers();
+    visualizerToggleFunctions[3]();
+  }
+
+  if(keysPressed.includes(escapeKey) && document.getElementById('Menu_Background').style.display == "flex"){
+    toggleMenu();
+  }
+
+  else if(keysPressed.includes(escapeKey) && document.getElementById('Menu_Background').style.display == "none"){
     turnOffAllVisualizers();
   }
+
+  console.log(keysPressed);
+
+}
+
+function keyReleased(e){
+  keysPressed.pop();
 }
 
 
