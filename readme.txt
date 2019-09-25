@@ -8,13 +8,11 @@ Current Relase Version: 7.0
 
 developer Notes:
 things to change-
-    > menu button change in functionality and design (too annyoing espically in youtube)
-    cycle visualizer key binding
+    x menu button change in functionality and design (too annyoing espically in youtube)
     x audio source finder
-    code that cycles through the visualizers
     x bug that makes the sound high pitched after inactivity
     > find optimizations
-    more comments
+    > more comments
     > better organization
     > optimize ui for small displays better 
     x optimize performance for less powerful devices
