@@ -426,21 +426,16 @@ document.onkeydown = keyPressed;
 document.onkeyup = keyReleased;
 
 function keyPressed(e) {
-  // 27 = esc
-  // 192 = `
-  // 17 = control
-  // 32 = space
-  // 86 = v
 
-  let secondaryKey = 17
-  let openVisualizerKey = 86;
+  let secondaryKey = 17 // control
+  let openVisualizerKey = 86; // v
   let escapeKey = 27;
-  let devKey = 192;
+  let devKey = 192;  // `
 
-  let viz1Key = 49;
-  let viz2Key = 50;
-  let viz3Key = 51;
-  let viz4Key = 52;
+  let viz1Key = 49;  // 1
+  let viz2Key = 50;  // 2
+  let viz3Key = 51;  // 3
+  let viz4Key = 52;  // 4
 
 
   if(keysPressed.length==0 || keysPressed[keysPressed.length-1]!=e.keyCode){
@@ -452,23 +447,19 @@ function keyPressed(e) {
   }
 
   if(keysPressed.includes(secondaryKey) && keysPressed.includes(viz1Key)){
-    turnOffAllVisualizers();
-    visualizerToggleFunctions[0]();
+    setActiveVisualizer(0);
   }
 
   if(keysPressed.includes(secondaryKey) && keysPressed.includes(viz2Key)){
-    turnOffAllVisualizers();
-    visualizerToggleFunctions[1]();
+    setActiveVisualizer(1);
   }
 
   if(keysPressed.includes(secondaryKey) && keysPressed.includes(viz3Key)){
-    turnOffAllVisualizers();
-    visualizerToggleFunctions[2]();
+    setActiveVisualizer(2);
   }
 
   if(keysPressed.includes(secondaryKey) && keysPressed.includes(viz4Key)){
-    turnOffAllVisualizers();
-    visualizerToggleFunctions[3]();
+    setActiveVisualizer(3);
   }
 
   if(keysPressed.includes(escapeKey) && document.getElementById('Menu_Background').style.display == "flex"){
