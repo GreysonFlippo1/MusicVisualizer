@@ -20,7 +20,7 @@ let websiteConfig={
 };
 
 let mediaElements = [];
-//                      bar ,wave,circle, amb ,
+//                       bar, wav , cir , amb ,
 let visualizerToggles=[false,false,false,false];
 let visualizerToggleFunctions=[toggleBarVis,toggleWaveViz,toggleCircleViz,toggleAmbienceViz];
 let visualizerToggleButtons=[];
