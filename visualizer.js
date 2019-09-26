@@ -90,6 +90,8 @@ function createElements(){
     }
   });
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Audio_Source_Identifier_Container';
+  document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Key_Bindings_Container';
+  document.getElementById('Key_Bindings_Container').innerText="Press 'control + v' to open or close the visualizer menu";
 
   document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Bar_Visualizer_Button';
   document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Wave_Visualizer_Button';
@@ -100,20 +102,24 @@ function createElements(){
 
   document.getElementById('Bar_Visualizer_Button').classList.add("Button");
   document.getElementById('Bar_Visualizer_Button').style.backgroundImage="url('"+bar_visualizer_image+"')";
-  //document.getElementById('Bar_Visualizer_Button').classList.add("Button_Selected");
   document.getElementById('Bar_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(0)});
+  document.getElementById('Bar_Visualizer_Button').innerHTML="<span class='Button_Title'>Bar</span><span class='Button_Text'>control + 1</span>";
 
   document.getElementById('Wave_Visualizer_Button').classList.add("Button");
   document.getElementById('Wave_Visualizer_Button').style.backgroundImage="url('"+wave_visualizer_image+"')";
   document.getElementById('Wave_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(1)});
+  document.getElementById('Wave_Visualizer_Button').innerHTML="<span class='Button_Title'>Wave</span><span class='Button_Text'>control + 2</span>";
 
   document.getElementById('Circle_Visualizer_Button').classList.add("Button");
   document.getElementById('Circle_Visualizer_Button').style.backgroundImage="url('"+circle_visualizer_image+"')";
   document.getElementById('Circle_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(2)});
+  document.getElementById('Circle_Visualizer_Button').innerHTML="<span class='Button_Title'>Circle</span><span class='Button_Text'>control + 3</span>";
 
   document.getElementById('Ambient_Visualizer_Button').classList.add("Button");
   document.getElementById('Ambient_Visualizer_Button').style.backgroundImage="url('"+ambient_visualizer_image+"')";
   document.getElementById('Ambient_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(3)});
+  document.getElementById('Ambient_Visualizer_Button').innerHTML="<span class='Button_Title'>Ambient</span><span class='Button_Text'>control + 4</span>";
+
   /*showLogs*/if(showLogs){console.log("menu spawned")};
 
   document.body.appendChild(document.createElement('canvas')).id="canvas1";
