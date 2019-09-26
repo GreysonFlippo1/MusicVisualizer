@@ -93,6 +93,8 @@ function createElements(){
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Key_Bindings_Container';
   document.getElementById('Key_Bindings_Container').innerText="Press 'control + v' to open or close the visualizer menu";
 
+  document.body.appendChild(document.createElement('div')).id = 'Notifications_Banner';
+
   document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Bar_Visualizer_Button';
   document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Wave_Visualizer_Button';
   document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Circle_Visualizer_Button';
@@ -139,7 +141,9 @@ function updateGUI(){
   document.getElementById('canvas1').setAttribute('width', window.innerWidth);
 }
 
+
 function findAudioSources(){
+  let prevMediaElementsLength = mediaElements.length;
   let audioElements = document.getElementsByTagName("audio");
   let videoElements = document.getElementsByTagName("video");
   let foundMediaElements = [...audioElements,...videoElements];
@@ -170,6 +174,13 @@ function findAudioSources(){
     }
   }
 
+
+    //new media elements hooked
+    if(prevMediaElementsLength < mediaElements.length){
+      let txt = ""+ mediaElements.length+ " Audio Sources Connected <br> Press 'control + v' To Show The Visualizer Menu";
+      showBanner(txt);
+    }
+
   /*showLogs*/if(showLogs){
     console.log("Media Elements Found: ", mediaElements);
     mediaElements[1].analyser.getByteFrequencyData(mediaElements[1].frequencyData);
@@ -177,6 +188,15 @@ function findAudioSources(){
     mediaElements[3].analyser.getByteFrequencyData(mediaElements[3].frequencyData);
     console.log("Frequency Datas: ", mediaElements[1].frequencyData[50], mediaElements[2].frequencyData[50], mediaElements[3].frequencyData[50] )
   };
+}
+
+
+function showBanner(txt){
+  document.getElementById("Notifications_Banner").style.bottom = "100px";
+  document.getElementById("Notifications_Banner").innerHTML = txt;
+  setTimeout(()=>{
+    document.getElementById("Notifications_Banner").style.bottom = "-100px";
+  },5000);
 }
 
 function findActiveAudioSource(){
@@ -475,8 +495,6 @@ function keyPressed(e) {
   else if(keysPressed.includes(escapeKey) && document.getElementById('Menu_Background').style.display == "none"){
     turnOffAllVisualizers();
   }
-
-  console.log(keysPressed);
 
 }
 

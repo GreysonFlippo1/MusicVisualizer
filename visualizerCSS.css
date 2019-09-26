@@ -158,6 +158,23 @@ put css in here to reduce the amout of dom manipulation in the js file
 }
 
 
+#Notifications_Banner{
+    position:fixed;
+    z-index: 2000;
+    /* bottom:100px; */
+    bottom:-100px;
+    left:30%;
+    width:40%;
+    height:40px;
+    padding-top:5px;
+    background-color:rgba(65, 65, 65, 0.9);
+    color:#dddddd;
+    text-align: center;
+    border-radius: 30px;
+    font-size:15px;
+    transition: bottom .5s;
+}
+
 
 @media screen and (max-width: 1200px) {
     #Menu_Container{
