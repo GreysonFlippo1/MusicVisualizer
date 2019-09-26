@@ -2,7 +2,7 @@
 //Ac130veterans@gmail.com
 //GreysonFlippo@gmail.com
 //created 6-6-2016 :)
-//updated 9-25-2019
+//updated 9-26-2019
 //https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
 let showLogs = false;
@@ -153,7 +153,7 @@ function findAudioSources(){
 
       let audioCtx=new AudioContext();
       let analyser=audioCtx.createAnalyser();
-      analyser.smoothingTimeConstant = .6;
+      analyser.smoothingTimeConstant = .5;
       let source = audioCtx.createMediaElementSource(foundMediaElements[i]);
       source.connect(analyser);
       analyser.connect(audioCtx.destination);
@@ -192,20 +192,20 @@ function findAudioSources(){
 
 
 function showBanner(txt){
-  document.getElementById("Notifications_Banner").style.bottom = "100px";
-  document.getElementById("Notifications_Banner").innerHTML = txt;
+  setTimeout(()=>{
+    document.getElementById("Notifications_Banner").style.bottom = "150px";
+    document.getElementById("Notifications_Banner").innerHTML = txt;
+  },2000);
   setTimeout(()=>{
     document.getElementById("Notifications_Banner").style.bottom = "-100px";
-  },5000);
+  },7000);
 }
 
 function findActiveAudioSource(){
   let bestSource = 0;
-  let max = 0;
   for(let i = 0; i < mediaElements.length; i++){
-    mediaElements[i].analyser.getByteFrequencyData(mediaElements[i].frequencyData);
-    if(mediaElements[i].frequencyData[20]+mediaElements[i].frequencyData[50]>max){
-      max = mediaElements[i].frequencyData[20]+mediaElements[i].frequencyData[50];
+    mediaElements[i].analyser.getByteTimeDomainData(mediaElements[i].dataArray);
+    if(mediaElements[i].dataArray[1]-128 != 0 || mediaElements[i].dataArray[mediaElements[i].dataArray.length-1]-128 != 0 || mediaElements[i].dataArray[Math.floor(mediaElements[i].dataArray.length/2)]-128 != 0){
       bestSource = i;
     }
   }
