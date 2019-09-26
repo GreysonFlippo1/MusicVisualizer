@@ -18,6 +18,8 @@ things to change-
     > optimize ui for small displays better 
     x optimize performance for less powerful devices
     > make less dependent on knowing which website the extension is loaded on top of
+    add a notification when the visualizer has found an audio souce and show it's key binding to enable it
+    add a space where the keybindings can be viewed by the user
     add a test website to run tests quicker
     make some debugging functions
     > look into storage for saving settings https://developer.chrome.com/extensions/storage
