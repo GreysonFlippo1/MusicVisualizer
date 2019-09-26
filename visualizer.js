@@ -36,11 +36,11 @@ function loaded() {
   /*showLogs*/if(showLogs){console.log("config loaded: ",websiteConfig.name)};
   createElements();
   updateGUI();
-  setInterval(updateGUI,100);
+  setInterval(updateGUI,250);
   findAudioSources();
   setInterval(findAudioSources,5000);
   findActiveAudioSource();
-  setInterval(findActiveAudioSource,100);
+  setInterval(findActiveAudioSource,250);
 }
 
 
@@ -50,6 +50,7 @@ function getCurrentPage(url){
     return{
       name:"Google-Play-Music-Config",
       color:"#FF5722",
+      color2:"#ffffff",
       fftUni:16384,
       bottom:90,
     }
@@ -134,11 +135,59 @@ function createElements(){
 
 }
 
+function setAlbumArtClick() {
+  if(document.getElementById("playerBarArt")){
+    document.getElementById("playerBarArt").addEventListener("click", toggleArtBackground);
+    document.getElementById("playerBarArt").style.cursor = 'pointer';
+  }
+}
+
+
+function toggleArtBackground(){
+  if(!document.getElementById("artBackground")){
+    document.body.appendChild(document.createElement('div')).id="artBackground";
+    document.getElementById("artBackground").style.display="block";
+    temp = websiteConfig.color;
+    websiteConfig.color = websiteConfig.color2;
+    websiteConfig.color2 = temp;
+  }
+  else if(document.getElementById("artBackground").style.display=="block"){
+    document.getElementById("artBackground").style.display="none";
+    temp = websiteConfig.color;
+    websiteConfig.color = websiteConfig.color2;
+    websiteConfig.color2 = temp;
+  }
+  else if(document.getElementById("artBackground").style.display=="none"){
+    document.getElementById("artBackground").style.display="block"
+    temp = websiteConfig.color;
+    websiteConfig.color = websiteConfig.color2;
+    websiteConfig.color2 = temp;
+  }
+  removeBars();
+}
+
+function updateArtWallpaperSource(){
+  let src1 = document.getElementById("playerBarArt").src;
+  let indexOfEquals = src1.indexOf("=");
+  src1 = src1.substring(0, indexOfEquals) + "=s" + 1024 + "-c-e100";
+  return src1;
+}
 
 function updateGUI(){
   document.getElementById('Audio_Source_Identifier_Container').innerText=mediaElements.length + " Audio Source(s) Connected";
   document.getElementById('canvas1').setAttribute('height', window.innerHeight - websiteConfig.bottom);
   document.getElementById('canvas1').setAttribute('width', window.innerWidth);
+  if(websiteConfig.name="Google-Play-Music-Config"){
+    setAlbumArtClick(); 
+    if(document.getElementById("artBackground")){
+      document.getElementById("artBackground").style.backgroundImage=`url(${updateArtWallpaperSource()})`;
+      document.getElementById("artBackground").style.height = window.innerHeight - websiteConfig.bottom + "px";
+      document.getElementById("artBackground").innerHTML=`
+        <p id="wtitle1">${document.getElementById('currently-playing-title').innerHTML}</p>
+        <p id="wtitle2">${document.getElementsByClassName('player-artist')[0].innerHTML + " - " + document.getElementsByClassName('player-album')[0].innerHTML}</p>
+        <div id="backgroundShade"></div>`;
+    }
+  }
 }
 
 
@@ -153,7 +202,7 @@ function findAudioSources(){
 
       let audioCtx=new AudioContext();
       let analyser=audioCtx.createAnalyser();
-      analyser.smoothingTimeConstant = .5;
+      analyser.smoothingTimeConstant = .3;
       let source = audioCtx.createMediaElementSource(foundMediaElements[i]);
       source.connect(analyser);
       analyser.connect(audioCtx.destination);
@@ -201,14 +250,17 @@ function showBanner(txt){
   },7000);
 }
 
+
+let previousAudioSource = 0;
 function findActiveAudioSource(){
-  let bestSource = 0;
+  let bestSource = previousAudioSource;
   for(let i = 0; i < mediaElements.length; i++){
     mediaElements[i].analyser.getByteTimeDomainData(mediaElements[i].dataArray);
     if(mediaElements[i].dataArray[1]-128 != 0 || mediaElements[i].dataArray[mediaElements[i].dataArray.length-1]-128 != 0 || mediaElements[i].dataArray[Math.floor(mediaElements[i].dataArray.length/2)]-128 != 0){
       bestSource = i;
     }
   }
+  previousAudioSource = bestSource;
   /*showLogs*/if(showLogs){console.log("Current Source: ",bestSource);}
   return bestSource;
 }
