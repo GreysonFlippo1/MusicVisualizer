@@ -19,6 +19,10 @@ let websiteConfig={
   bottom:90,
 };
 
+let userPreferences = {
+  artClipping:true,
+}
+
 let mediaElements = [];
 //                       bar, wav , cir , amb ,
 let visualizerToggles=[false,false,false,false];
@@ -82,6 +86,7 @@ function getCurrentPage(url){
 }
 
 
+
 function createElements(){
   document.body.appendChild(document.createElement('div')).id = 'Menu_Background';
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Menu_Container';
@@ -89,7 +94,35 @@ function createElements(){
     if(e.target.id==="Menu_Background"){
       toggleMenu();
     }
+    if(e.target.id==="Album_Art_Clipping_Switch" || e.target.id==="Album_Art_Clipping_Switch_Circle"){
+      toggleAlbumArtClipping();
+    }
   });
+
+  document.getElementById('Menu_Background').addEventListener("mouseover", (e)=>{
+    let menuType = e.target.id.split("_")[0];
+    if(menuType=="Bar"){
+      document.getElementById("Settings_Menu").innerHTML = `
+        <br>
+
+        <div class="Setting_Name">
+          <p>Allow Album Art Clipping</p> 
+          <div class="switch" id="Album_Art_Clipping_Switch">
+            <div class="Switch_Circle" id="Album_Art_Clipping_Switch_Circle"></div>
+          </div>
+        </div>
+
+      `;
+      updateSwitch1();
+      document.getElementById("Settings_Menu").style.height = "150px";
+    }
+    else if(menuType=="Menu"){
+      document.getElementById("Settings_Menu").style.height = "0px";
+      document.getElementById("Settings_Menu").innerHTML = "";
+    }
+  });
+
+  document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Settings_Menu';
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Audio_Source_Identifier_Container';
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Key_Bindings_Container';
   document.getElementById('Key_Bindings_Container').innerText="Press 'control + v' to open or close the visualizer menu";
@@ -106,22 +139,22 @@ function createElements(){
   document.getElementById('Bar_Visualizer_Button').classList.add("Button");
   document.getElementById('Bar_Visualizer_Button').style.backgroundImage="url('"+bar_visualizer_image+"')";
   document.getElementById('Bar_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(0)});
-  document.getElementById('Bar_Visualizer_Button').innerHTML="<span class='Button_Title'>Bar</span><span class='Button_Text'>control + 1</span>";
+  document.getElementById('Bar_Visualizer_Button').innerHTML="<span id='Bar_Visualizer_Title' class='Button_Title'>Bar</span><span id='Bar_Visualizer_Text' class='Button_Text'>control + 1</span>";
 
   document.getElementById('Wave_Visualizer_Button').classList.add("Button");
   document.getElementById('Wave_Visualizer_Button').style.backgroundImage="url('"+wave_visualizer_image+"')";
   document.getElementById('Wave_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(1)});
-  document.getElementById('Wave_Visualizer_Button').innerHTML="<span class='Button_Title'>Wave</span><span class='Button_Text'>control + 2</span>";
+  document.getElementById('Wave_Visualizer_Button').innerHTML="<span id='Wave_Visualizer_Title' class='Button_Title'>Wave</span><span id='Wave_Visualizer_Text' class='Button_Text'>control + 2</span>";
 
   document.getElementById('Circle_Visualizer_Button').classList.add("Button");
   document.getElementById('Circle_Visualizer_Button').style.backgroundImage="url('"+circle_visualizer_image+"')";
   document.getElementById('Circle_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(2)});
-  document.getElementById('Circle_Visualizer_Button').innerHTML="<span class='Button_Title'>Circle</span><span class='Button_Text'>control + 3</span>";
+  document.getElementById('Circle_Visualizer_Button').innerHTML="<span id='Circle_Visualizer_Title' class='Button_Title'>Circle</span><span id='Circle_Visualizer_Text' class='Button_Text'>control + 3</span>";
 
   document.getElementById('Ambient_Visualizer_Button').classList.add("Button");
   document.getElementById('Ambient_Visualizer_Button').style.backgroundImage="url('"+ambient_visualizer_image+"')";
   document.getElementById('Ambient_Visualizer_Button').addEventListener("click", ()=>{setActiveVisualizer(3)});
-  document.getElementById('Ambient_Visualizer_Button').innerHTML="<span class='Button_Title'>Ambient</span><span class='Button_Text'>control + 4</span>";
+  document.getElementById('Ambient_Visualizer_Button').innerHTML="<span id='Ambient_Visualizer_Title' class='Button_Title'>Ambient</span><span id='Ambient_Visualizer_Text' class='Button_Text'>control + 4</span>";
 
   /*showLogs*/if(showLogs){console.log("menu spawned")};
 
@@ -135,23 +168,50 @@ function createElements(){
 
 }
 
+function updateSettings(settings){
+  userPreferences = {...userPreferences,...settings};
+}
+
+function toggleAlbumArtClipping(){
+  let newSetting = !userPreferences.artClipping;
+  updateSettings({artClipping:newSetting});
+
+  if(document.getElementById("Album_Art_Clipping_Switch")){
+    updateSwitch1()
+  }
+}
+
+function updateSwitch1(){
+  document.getElementById("Album_Art_Clipping_Switch").style.backgroundColor="#225522";
+  document.getElementById("Album_Art_Clipping_Switch").getElementsByTagName("Div")[0].style.left="24px";
+  if(!userPreferences.artClipping){
+    document.getElementById("Album_Art_Clipping_Switch").style.backgroundColor="rgba(0,0,0,0)";
+    document.getElementById("Album_Art_Clipping_Switch").getElementsByTagName("Div")[0].style.left="-1px";
+  }
+}
+
+
 function setAlbumArtClick() {
   if(document.getElementById("playerBarArt")){
     document.getElementById("playerBarArt").addEventListener("click", toggleArtBackground);
     document.getElementById("playerBarArt").style.cursor = 'pointer';
+    if(userPreferences.artClipping && document.getElementById('artBackground')){
+      document.getElementById('artBackground').style.backgroundSize = 'cover';
+    }
+    else if(document.getElementById('artBackground')){
+      document.getElementById('artBackground').style.backgroundSize = 'contain';
+    }
   }
 }
+
 
 
 function toggleArtBackground(){
   if(!document.getElementById("artBackground")){
     document.body.appendChild(document.createElement('div')).id="artBackground";
-    document.getElementById("artBackground").style.display="block";
-    temp = websiteConfig.color;
-    websiteConfig.color = websiteConfig.color2;
-    websiteConfig.color2 = temp;
+    document.getElementById("artBackground").style.display="none";
   }
-  else if(document.getElementById("artBackground").style.display=="block"){
+  if(document.getElementById("artBackground").style.display=="block"){
     document.getElementById("artBackground").style.display="none";
     temp = websiteConfig.color;
     websiteConfig.color = websiteConfig.color2;
