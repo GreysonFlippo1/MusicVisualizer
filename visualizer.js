@@ -307,7 +307,7 @@ function findAudioSources(){
 
       let audioCtx=new AudioContext();
       let analyser=audioCtx.createAnalyser();
-      analyser.smoothingTimeConstant = .3;
+      analyser.smoothingTimeConstant = .6;
       let source = audioCtx.createMediaElementSource(foundMediaElements[i]);
       source.connect(analyser);
       analyser.connect(audioCtx.destination);
