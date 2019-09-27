@@ -601,10 +601,6 @@ function turnOffAllVisualizers(){
 }
 
 
-
-//try to do multi-key binds - maybe have the menu only open while holding leftSift+V or something
-//could make an array of keys pressed and keys lifted
-
 let keysPressed = [];
 
 document.onkeydown = keyPressed;

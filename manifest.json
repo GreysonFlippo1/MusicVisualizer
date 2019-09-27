@@ -5,7 +5,8 @@
   "description": "Music Visualizer for Google Play Music and YouTube. Press 'Control + V' once loaded into a webpage to start visualizing!",
   "web_accessible_resources": ["Bar_Viz.png","Wave_Viz.png","Circle_Viz.png","Ambient_Viz.png"],
   "icons": {                   
-    "48": "icon48.png"
+    "48": "icon48.png",                   
+    "128": "icon128.jpg"
   },
  "browser_action": {
     "default_icon": {                   

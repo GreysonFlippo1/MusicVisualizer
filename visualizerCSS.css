@@ -98,7 +98,7 @@ put css in here to reduce the amout of dom manipulation in the js file
     top:-1px;
     background-color: #444444;
     border-radius: 50%;
-    transition: left .5s;
+    transition: left .25s;
 }
 
 .Switch_Circle_Start_True{
