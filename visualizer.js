@@ -147,7 +147,7 @@ function createElements(){
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Settings_Menu';
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Audio_Source_Identifier_Container';
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Key_Bindings_Container';
-  document.getElementById('Key_Bindings_Container').innerText="Press 'control + v' to open or close the visualizer menu";
+  document.getElementById('Key_Bindings_Container').innerText="Press ' f1 ' to open or close the visualizer menu";
 
   document.body.appendChild(document.createElement('div')).id = 'Notifications_Banner';
 
@@ -331,7 +331,7 @@ function findAudioSources(){
 
     //new media elements hooked
     if(prevMediaElementsLength < mediaElements.length){
-      let txt = ""+ mediaElements.length+ " Audio Sources Connected <br> Press 'control + v' To Show The Visualizer Menu";
+      let txt = ""+ mediaElements.length+ " Audio Sources Connected <br> Press ' f1 ' To Show The Visualizer Menu";
       showBanner(txt);
     }
 
@@ -609,7 +609,8 @@ document.onkeyup = keyReleased;
 function keyPressed(e) {
 
   let secondaryKey = 17 // control
-  let openVisualizerKey = 86; // v
+  // let openVisualizerKey = 86; // v
+  let openVisualizerKey = 112; // f1
   let escapeKey = 27;
   let devKey = 192;  // `
 
@@ -623,7 +624,7 @@ function keyPressed(e) {
     keysPressed.push(e.keyCode);
   }
 
-  if(keysPressed.includes(secondaryKey) && keysPressed.includes(openVisualizerKey)){
+  if(keysPressed.includes(openVisualizerKey)){
     toggleMenu();
   }
 
