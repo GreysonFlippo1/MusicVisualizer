@@ -18,7 +18,8 @@
       "css":["visualizerCSS.css"],
       "js": ["visualizer.js"]
     }
+  ],
+  "permissions": [
+    "storage"
   ]
-  
-  
 }

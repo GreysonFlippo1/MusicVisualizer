@@ -39,6 +39,7 @@ function loaded() {
   /*showLogs*/if(showLogs){console.log("Loading Extension...")};
   websiteConfig = getCurrentPage(window.location.href);
   /*showLogs*/if(showLogs){console.log("config loaded: ",websiteConfig.name)};
+  retireveSettings();
   createElements();
   updateGUI();
   setInterval(updateGUI,250);
@@ -191,8 +192,22 @@ function createElements(){
 
 }
 
+
+function retireveSettings(){
+  try{
+    chrome.storage.local.get(['artClipping','colorCycle'], function(result) {
+      userPreferences={...userPreferences,...result}
+    });
+  }
+  catch(error){
+    console.log("No Data To Retrieve: ", error)
+  }
+}
+
 function updateSettings(settings){
   userPreferences = {...userPreferences,...settings};
+  chrome.storage.local.set({...userPreferences}, function() {
+  });
 }
 
 function toggleAlbumArtClipping(){
