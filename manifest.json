@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Music Visualizer for Google Play™ Music",
-  "version": "8.3",
-  "description": "Music Visualizer for Google Play Music and YouTube. Press ' f1 ' once loaded into a webpage to start visualizing!",
+  "version": "8.4",
+  "description": "Music Visualizer for Google Play Music and YouTube. Press ' f2 ' once loaded into a webpage to start visualizing!",
   "web_accessible_resources": ["Bar_Viz.png","Wave_Viz.png","Circle_Viz.png","Ambient_Viz.png"],
   "icons": {                   
     "48": "icon48.png",                   
