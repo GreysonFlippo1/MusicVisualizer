@@ -2,7 +2,7 @@
 //Ac130veterans@gmail.com
 //GreysonFlippo@gmail.com
 //created 6-6-2016 :)
-//updated 9-26-2019
+//updated 9-27-2019
 //https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
 let showLogs = false;
@@ -21,6 +21,7 @@ let websiteConfig={
 
 let userPreferences = {
   artClipping:true,
+  colorCycle:true,
 }
 
 let mediaElements = [];
@@ -97,6 +98,9 @@ function createElements(){
     if(e.target.id==="Album_Art_Clipping_Switch" || e.target.id==="Album_Art_Clipping_Switch_Circle"){
       toggleAlbumArtClipping();
     }
+    if(e.target.id==="Color_Cycle_Switch" || e.target.id==="Color_Cycle_Switch_Circle"){
+      toggleColorCycling();
+    }
   });
 
   document.getElementById('Menu_Background').addEventListener("mouseover", (e)=>{
@@ -113,8 +117,27 @@ function createElements(){
         </div>
 
       `;
-      updateSwitch1();
+      updateSwitch("Album_Art_Clipping_Switch",userPreferences.artClipping);
       document.getElementById("Settings_Menu").style.height = "150px";
+    }
+    if(menuType=="Wave" || menuType == "Circle"){
+      document.getElementById("Settings_Menu").innerHTML = `
+        <br>
+
+        <div class="Setting_Name">
+          <p>Allow Color Cycling</p> 
+          <div class="switch" id="Color_Cycle_Switch">
+            <div class="Switch_Circle" id="Color_Cycle_Switch_Circle"></div>
+          </div>
+        </div>
+
+      `;
+      updateSwitch("Color_Cycle_Switch",userPreferences.colorCycle);
+      document.getElementById("Settings_Menu").style.height = "150px";
+    }
+    else if(menuType=="Ambient"){
+      document.getElementById("Settings_Menu").style.height = "0px";
+      document.getElementById("Settings_Menu").innerHTML = "";
     }
     else if(menuType=="Menu"){
       document.getElementById("Settings_Menu").style.height = "0px";
@@ -177,16 +200,25 @@ function toggleAlbumArtClipping(){
   updateSettings({artClipping:newSetting});
 
   if(document.getElementById("Album_Art_Clipping_Switch")){
-    updateSwitch1()
+    updateSwitch("Album_Art_Clipping_Switch",userPreferences.artClipping)
   }
 }
 
-function updateSwitch1(){
-  document.getElementById("Album_Art_Clipping_Switch").style.backgroundColor="#225522";
-  document.getElementById("Album_Art_Clipping_Switch").getElementsByTagName("Div")[0].style.left="24px";
-  if(!userPreferences.artClipping){
-    document.getElementById("Album_Art_Clipping_Switch").style.backgroundColor="rgba(0,0,0,0)";
-    document.getElementById("Album_Art_Clipping_Switch").getElementsByTagName("Div")[0].style.left="-1px";
+function toggleColorCycling(){
+  let newSetting = !userPreferences.colorCycle;
+  updateSettings({colorCycle:newSetting});
+
+  if(document.getElementById("Color_Cycle_Switch")){
+    updateSwitch("Color_Cycle_Switch",userPreferences.colorCycle)
+  }
+}
+
+function updateSwitch(swtichName,preference){
+  document.getElementById(swtichName).style.backgroundColor="#225522";
+  document.getElementById(swtichName).getElementsByTagName("Div")[0].style.left="24px";
+  if(!preference){
+    document.getElementById(swtichName).style.backgroundColor="rgba(0,0,0,0)";
+    document.getElementById(swtichName).getElementsByTagName("Div")[0].style.left="-1px";
   }
 }
 
@@ -442,19 +474,21 @@ function waveVis() {
   let WIDTH = window.innerWidth;
   let HEIGHT = window.innerHeight - websiteConfig.bottom;
     if (websiteConfig.name == "YouTube-Config") { document.getElementById("content").onload = function () { console.log("Music Visualizer: YouTube"); } }
-    if (red == 255){
-      if (blue > 0) { blue--; }
-      else { green++ }
-    }
-
-    if (green == 255){
-      if (red > 0) { red--; }
-      else { blue++ }
-    }
-
-    if (blue == 255){
-      if (green > 0) { green--; }
-      else { red++; }
+    if(userPreferences.colorCycle){
+      if (red == 255){
+        if (blue > 0) { blue--; }
+        else { green++ }
+      }
+  
+      if (green == 255){
+        if (red > 0) { red--; }
+        else { blue++ }
+      }
+  
+      if (blue == 255){
+        if (green > 0) { green--; }
+        else { red++; }
+      }
     }
     let activeSource = findActiveAudioSource();
     mediaElements[activeSource].analyser.getByteTimeDomainData(mediaElements[activeSource].dataArray);
