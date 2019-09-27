@@ -49,6 +49,19 @@ put css in here to reduce the amout of dom manipulation in the js file
     justify-content: space-between;
     padding-left:20px;
     padding-right:20px;
+    position: relative;
+    height:64px;
+}
+
+.Setting_Name p{
+    position: absolute;
+    left:20px;
+    top:0px;
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
 }
 
 .Setting_Name:hover{
@@ -61,8 +74,9 @@ put css in here to reduce the amout of dom manipulation in the js file
     /* background-color: #994444; */
     border:1px solid #777777;
     border-radius: 25px;
-    margin-top:11px;
-    position: relative;
+    top:11px;
+    right:20px;
+    position: absolute;
     transition: background-color .5s;
     cursor: pointer;
 }

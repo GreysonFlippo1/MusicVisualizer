@@ -108,7 +108,6 @@ function createElements(){
     let menuType = e.target.id.split("_")[0];
     if(menuType=="Bar"){
       document.getElementById("Settings_Menu").innerHTML = `
-        <br>
 
         <div class="Setting_Name">
           <p>Allow Album Art Clipping</p> 
@@ -123,7 +122,6 @@ function createElements(){
     }
     if(menuType=="Wave" || menuType == "Circle"){
       document.getElementById("Settings_Menu").innerHTML = `
-        <br>
 
         <div class="Setting_Name">
           <p>Allow Color Cycling</p> 
