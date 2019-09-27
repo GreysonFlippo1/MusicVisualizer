@@ -188,6 +188,7 @@ put css in here to reduce the amout of dom manipulation in the js file
     height:100%;
     display:none;
     background-color: #000000;
+    overflow: hidden;
 }
 
 #topGlow{
