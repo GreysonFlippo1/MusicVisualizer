@@ -421,7 +421,7 @@ function barVis()
   for (let i = 0; i < barAmnt; i++) {
     if (vizReady == barAmnt) {
       let smooth = 0;
-      let formula = Math.ceil(Math.pow(i, 1.2));
+      let formula = Math.ceil(Math.pow(i, 1.25));
       let pop;
       pop = (mediaElements[activeSource].frequencyData[formula]) * (mediaElements[activeSource].frequencyData[formula]) * (mediaElements[activeSource].frequencyData[formula] / 3) / (255 * 255 * (255 / 3)) * ((window.innerHeight - 100) * .30);
 
