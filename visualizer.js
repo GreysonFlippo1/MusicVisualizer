@@ -583,5 +583,3 @@ function keyPressed(e) {
 function keyReleased(e){
   keysPressed.pop();
 }
-
-
