@@ -2,7 +2,7 @@
 //Ac130veterans@gmail.com
 //GreysonFlippo@gmail.com
 //created 6-6-2016 :)
-//updated 9-27-2019
+//updated 5-10-2020
 //https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
 let showLogs = false;
@@ -22,6 +22,15 @@ let websiteConfig={
 let userPreferences = {
   artClipping:true,
   colorCycle:true,
+  auto_connect:true,
+  show_banner:true,
+  primary_color:null,
+  max_height:100,
+  smoothingTimeConstant:0,
+  allow_youtube:true,
+  allow_google_music:true,
+  allow_youtube_music:true,
+  allow_other:false,
 }
 
 let mediaElements = [];
@@ -96,58 +105,13 @@ function createElements(){
     if(e.target.id==="Menu_Background"){
       toggleMenu();
     }
-    if(e.target.id==="Album_Art_Clipping_Switch" || e.target.id==="Album_Art_Clipping_Switch_Circle"){
-      toggleAlbumArtClipping();
-    }
-    if(e.target.id==="Color_Cycle_Switch" || e.target.id==="Color_Cycle_Switch_Circle"){
-      toggleColorCycling();
-    }
   });
 
-  document.getElementById('Menu_Background').addEventListener("mouseover", (e)=>{
-    let menuType = e.target.id.split("_")[0];
-    if(menuType=="Bar"){
-      document.getElementById("Settings_Menu").innerHTML = `
-
-        <div class="Setting_Name">
-          <p>Allow Album Art Clipping</p> 
-          <div class="switch" id="Album_Art_Clipping_Switch">
-            <div class="Switch_Circle" id="Album_Art_Clipping_Switch_Circle"></div>
-          </div>
-        </div>
-
-      `;
-      updateSwitch("Album_Art_Clipping_Switch",userPreferences.artClipping);
-      document.getElementById("Settings_Menu").style.height = "150px";
-    }
-    if(menuType=="Wave" || menuType == "Circle"){
-      document.getElementById("Settings_Menu").innerHTML = `
-
-        <div class="Setting_Name">
-          <p>Allow Color Cycling</p> 
-          <div class="switch" id="Color_Cycle_Switch">
-            <div class="Switch_Circle" id="Color_Cycle_Switch_Circle"></div>
-          </div>
-        </div>
-
-      `;
-      updateSwitch("Color_Cycle_Switch",userPreferences.colorCycle);
-      document.getElementById("Settings_Menu").style.height = "150px";
-    }
-    else if(menuType=="Ambient"){
-      document.getElementById("Settings_Menu").style.height = "0px";
-      document.getElementById("Settings_Menu").innerHTML = "";
-    }
-    else if(menuType=="Menu"){
-      document.getElementById("Settings_Menu").style.height = "0px";
-      document.getElementById("Settings_Menu").innerHTML = "";
-    }
-  });
-
-  document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Settings_Menu';
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Audio_Source_Identifier_Container';
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Key_Bindings_Container';
+  document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Settings_Button_Container';
   document.getElementById('Key_Bindings_Container').innerText="Press ' f2 ' to open or close the visualizer menu";
+  document.getElementById('Settings_Button_Container').innerText="Click here to customize";
 
   document.body.appendChild(document.createElement('div')).id = 'Notifications_Banner';
 
@@ -211,30 +175,12 @@ function updateSettings(settings){
 function toggleAlbumArtClipping(){
   let newSetting = !userPreferences.artClipping;
   updateSettings({artClipping:newSetting});
-
-  if(document.getElementById("Album_Art_Clipping_Switch")){
-    updateSwitch("Album_Art_Clipping_Switch",userPreferences.artClipping)
-  }
 }
 
 function toggleColorCycling(){
   let newSetting = !userPreferences.colorCycle;
   updateSettings({colorCycle:newSetting});
-
-  if(document.getElementById("Color_Cycle_Switch")){
-    updateSwitch("Color_Cycle_Switch",userPreferences.colorCycle)
-  }
 }
-
-function updateSwitch(swtichName,preference){
-  document.getElementById(swtichName).style.backgroundColor="#225522";
-  document.getElementById(swtichName).getElementsByTagName("Div")[0].style.left="24px";
-  if(!preference){
-    document.getElementById(swtichName).style.backgroundColor="rgba(0,0,0,0)";
-    document.getElementById(swtichName).getElementsByTagName("Div")[0].style.left="-1px";
-  }
-}
-
 
 function setAlbumArtClick() {
   if(document.getElementById("playerBarArt")){
@@ -307,7 +253,7 @@ function findAudioSources(){
 
       let audioCtx=new AudioContext();
       let analyser=audioCtx.createAnalyser();
-      analyser.smoothingTimeConstant = .6;
+      analyser.smoothingTimeConstant = userPreferences.smoothingTimeConstant;
       let source = audioCtx.createMediaElementSource(foundMediaElements[i]);
       source.connect(analyser);
       analyser.connect(audioCtx.destination);
@@ -328,20 +274,11 @@ function findAudioSources(){
     }
   }
 
-
     //new media elements hooked
     if(prevMediaElementsLength < mediaElements.length){
       let txt = ""+ mediaElements.length+ " Audio Sources Connected <br> Press ' f2 ' To Show The Visualizer Menu";
       showBanner(txt);
     }
-
-  /*showLogs*/if(showLogs){
-    console.log("Media Elements Found: ", mediaElements);
-    mediaElements[1].analyser.getByteFrequencyData(mediaElements[1].frequencyData);
-    mediaElements[2].analyser.getByteFrequencyData(mediaElements[2].frequencyData);
-    mediaElements[3].analyser.getByteFrequencyData(mediaElements[3].frequencyData);
-    console.log("Frequency Datas: ", mediaElements[1].frequencyData[50], mediaElements[2].frequencyData[50], mediaElements[3].frequencyData[50] )
-  };
 }
 
 
@@ -416,23 +353,12 @@ function barVis()
 {
   let activeSource = findActiveAudioSource();
   mediaElements[activeSource].analyser.getByteFrequencyData(mediaElements[activeSource].frequencyData);
-
-  let last = -1;
   for (let i = 0; i < barAmnt; i++) {
     if (vizReady == barAmnt) {
-      let smooth = 0;
-      let formula = Math.ceil(Math.pow(i, 1.25));
-      let pop;
-      pop = (mediaElements[activeSource].frequencyData[formula]) * (mediaElements[activeSource].frequencyData[formula]) * (mediaElements[activeSource].frequencyData[formula] / 3) / (255 * 255 * (255 / 3)) * ((window.innerHeight - 100) * .30);
-
-      if (last != -1) {
-        smooth = pop + last / 2;
-      }
-      else {
-        smooth = pop;
-      }
-      last = pop;
-      document.getElementById('bar' + i).style.height = smooth + 'px';
+      const formula = Math.ceil(Math.pow(i, 1.25));
+      const frequencyData = mediaElements[activeSource].frequencyData[formula];
+      const pop = ((frequencyData * frequencyData * frequencyData) / (255 * 255 * 255)) * ((window.innerHeight - websiteConfig.bottom) * .30) * (userPreferences.max_height / 100);
+      document.getElementById('bar' + i).style.height = pop + 'px';
     }
   }
 }
