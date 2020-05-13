@@ -18,7 +18,6 @@ things to change-
     x add a space where the keybindings can be viewed by the user
     x look into storage for saving settings https://developer.chrome.com/extensions/storage
     > find optimizations
-    > more comments
     > better organization
     > optimize ui for small displays better 
     - add a test website to run tests quicker
