@@ -123,7 +123,7 @@ put css in here to reduce the amout of dom manipulation in the js file
     position: fixed;
     top: 0px;
     left: 0px;
-    background-color:black;
+    background-color:white;
     width:100%;
     display: none;
 }
@@ -245,6 +245,113 @@ put css in here to reduce the amout of dom manipulation in the js file
     text-overflow: ellipsis;
     overflow: hidden;
     width:90%;
+}
+
+#settings_modal_background{
+    width:100vw;
+    height:100vh;
+    position: fixed;
+    top:0px;
+    left:0px;
+    display: none;
+    opacity: 0;
+    flex-direction: column;
+    align-items: center;
+    z-index:1600;
+    background-color: rgba(0,0,0,0.4);
+    transition:opacity 0.5s;
+}
+
+#settings_modal{
+    width:50vw;
+    margin-top:10vh;
+    background-color: #1a1a1a;
+    border-radius: 40px;
+    font-family:'Roboto', sans-serif;
+    padding-bottom:50px;
+}
+
+#settings_title{
+    /* color:#779ecb; */
+    color:#ffffff;
+    font-size: 50px;
+    margin-top:80px;
+    background-color:#222222;
+    padding-top:20px;
+    padding-bottom:20px;
+    margin-bottom: 20px;
+}
+
+#back_button{
+    color:#ffffff;
+    font-size: 50px;
+    margin-left:100px;
+    margin-right:50px;
+    cursor: pointer;
+}
+
+.setting{
+    color:#cccccc;
+    font-size:35px;
+    padding-left:80px;
+    position: relative;
+    padding-top:20px;
+    padding-bottom:20px;
+}
+
+.switch{
+    position: absolute;
+    right: 80px;
+    top:25px;
+    height:30px;
+    width:65px;
+    background-color: rgba(119, 158, 203,0.5);
+    border-radius:21px;
+    cursor:pointer;
+    opacity: 1;
+    transition: opacity .3s;
+}
+
+.switch_handle{
+    position: absolute;
+    width:42px;
+    height:42px;
+    background-color: rgb(119, 158, 203);
+    top:-6px;
+    left:23px;
+    border-radius: 50%;
+    transition: left .3s;
+}
+
+.off{
+    opacity: 0.3;
+}
+
+.off div{
+    left:0px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.number_box{
+    position: absolute;
+    top:20px;
+    right:80px;
+    height:42px;
+    font-size:30px;
+    text-align:right;
+    width:200px;
+    border:0px solid rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0);
+    color:#aaaaaa;
+}
+
+.invertedImages{
+    filter: invert(1);
 }
 
 @media screen and (max-width: 1200px) {

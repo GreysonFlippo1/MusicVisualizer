@@ -25,12 +25,13 @@ let userPreferences = {
   auto_connect:true,
   show_banner:true,
   primary_color:null,
-  max_height:100,
+  max_height:110,
   smoothingTimeConstant:0,
   allow_youtube:true,
   allow_google_music:true,
   allow_youtube_music:true,
   allow_other:false,
+  dark_mode:true
 }
 
 let mediaElements = [];
@@ -144,6 +145,11 @@ function createElements(){
 
   /*showLogs*/if(showLogs){console.log("menu spawned")};
 
+  document.body.appendChild(document.createElement('div')).id = 'settings_modal_background';
+  document.getElementById('settings_modal_background').appendChild(document.createElement('div')).id = 'settings_modal';
+  document.getElementById('settings_modal').appendChild(document.createElement('div')).id = 'settings_title';
+  document.getElementById('settings_title').innerHTML='<span id="back_button">&#8592;</span>Settings';
+
   document.body.appendChild(document.createElement('canvas')).id="canvas1";
 
   document.body.appendChild(document.createElement('div')).id="ambience1";
@@ -237,6 +243,19 @@ function updateGUI(){
         <p id="wtitle1">${document.getElementById('currently-playing-title').innerHTML}</p>
         <p id="wtitle2">${document.getElementsByClassName('player-artist')[0].innerHTML + " - " + document.getElementsByClassName('player-album')[0].innerHTML}</p>
         <div id="backgroundShade"></div>`;
+    }
+    if (userPreferences.dark_mode) { 
+      document.body.style.filter='invert(1)';
+      document.querySelector("#content-container").style.backgroundColor='#eeeeee'
+      document.getElementById('ambience1').style.filter='invert(1)';
+      document.getElementById("Menu_Background").style.filter='invert(1)';
+      invertImages(true);
+    } else {
+      document.body.style.filter='invert(0)';
+      document.querySelector("#content-container").style.backgroundColor=null
+      document.getElementById('ambience1').style.filter='invert(0)';
+      document.getElementById("Menu_Background").style.filter='invert(0)';
+      invertImages(false);
     }
   }
 }
@@ -412,7 +431,10 @@ function waveVis() {
   let canvasCtx = document.getElementById('canvas1').getContext("2d");
   let WIDTH = window.innerWidth;
   let HEIGHT = window.innerHeight - websiteConfig.bottom;
-    if (websiteConfig.name == "YouTube-Config") { document.getElementById("content").onload = function () { console.log("Music Visualizer: YouTube"); } }
+    if (websiteConfig.name == "YouTube-Config") { 
+      document.getElementById("content").onload = function () { console.log("Music Visualizer: YouTube"); } 
+      if(userPreferences.dark_mode) document.getElementById('canvas1').style.backgroundColor='black';
+    }
     if(userPreferences.colorCycle){
       if (red == 255){
         if (blue > 0) { blue--; }
@@ -438,7 +460,11 @@ function waveVis() {
     canvasCtx.fillStyle = 'rgba(0, 0, 0, 0)';
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
     canvasCtx.strokeStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
-    canvasCtx.lineWidth = 2000/window.innerHeight;
+    canvasCtx.lineWidth = 4000/window.innerHeight;
+    canvasCtx.shadowColor = '#000';
+    canvasCtx.shadowBlur = 1;
+    canvasCtx.shadowOffsetX = 0;
+    canvasCtx.shadowOffsetY = 0;
     if (visualizerToggles[2]) { canvasCtx.lineWidth = 3; }
     canvasCtx.beginPath();
     let sliceWidth = WIDTH/mediaElements[activeSource].bufferLength * 4;
@@ -526,6 +552,17 @@ function turnOffAllVisualizers(){
   }
 }
 
+function switchDarkMode(){
+  userPreferences.dark_mode ? userPreferences.dark_mode = false : userPreferences.dark_mode = true;
+}
+
+function invertImages(invert) {
+  const images = document.getElementsByTagName('img')
+  for (let i = 0; i < images.length; i++) {
+    invert ? images[i].classList.add('invertedImages') : images[i].classList.remove('invertedImages')
+  }
+}
+
 
 let keysPressed = [];
 
@@ -571,6 +608,7 @@ function keyPressed(e) {
   }
 
   if(keysPressed.includes(escapeKey) && document.getElementById('Menu_Background').style.display == "flex"){
+    switchDarkMode()
     toggleMenu();
   }
 
