@@ -249,12 +249,14 @@ function updateGUI(){
       document.querySelector("#content-container").style.backgroundColor='#eeeeee'
       document.getElementById('ambience1').style.filter='invert(1)';
       document.getElementById("Menu_Background").style.filter='invert(1)';
+      if(document.getElementById("artBackground")) document.getElementById("artBackground").style.filter='grayscale(20%) invert(1)'
       invertImages(true);
     } else {
       document.body.style.filter='invert(0)';
       document.querySelector("#content-container").style.backgroundColor=null
       document.getElementById('ambience1').style.filter='invert(0)';
       document.getElementById("Menu_Background").style.filter='invert(0)';
+      if(document.getElementById("artBackground")) document.getElementById("artBackground").style.filter='grayscale(20%)'
       invertImages(false);
     }
   }
