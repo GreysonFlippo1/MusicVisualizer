@@ -460,7 +460,7 @@ function waveVis() {
     canvasCtx.fillStyle = 'rgba(0, 0, 0, 0)';
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
     canvasCtx.strokeStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
-    canvasCtx.lineWidth = 4000/window.innerHeight;
+    canvasCtx.lineWidth = 3000/window.innerHeight;
     canvasCtx.shadowColor = '#000';
     canvasCtx.shadowBlur = 1;
     canvasCtx.shadowOffsetX = 0;
