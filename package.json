@@ -1,0 +1,25 @@
+{
+  "name": "visualizer",
+  "version": "1.0.0",
+  "description": "DOWNLOAD FROM CHROME WEB STORE:\r https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb?hl=en",
+  "main": "visualizer old.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.0.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.20.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GreysonFlippo1/MusicVisualizer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GreysonFlippo1/MusicVisualizer/issues"
+  },
+  "homepage": "https://github.com/GreysonFlippo1/MusicVisualizer#readme"
+}
