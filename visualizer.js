@@ -234,7 +234,7 @@ function updateGUI(){
   document.getElementById('Audio_Source_Identifier_Container').innerText=mediaElements.length + " Audio Source(s) Connected";
   document.getElementById('canvas1').setAttribute('height', window.innerHeight - websiteConfig.bottom);
   document.getElementById('canvas1').setAttribute('width', window.innerWidth);
-  if(websiteConfig.name="Google-Play-Music-Config"){
+  if(websiteConfig.name=="Google-Play-Music-Config"){
     setAlbumArtClick(); 
     if(document.getElementById("artBackground")){
       document.getElementById("artBackground").style.backgroundImage=`url(${updateArtWallpaperSource()})`;
