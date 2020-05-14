@@ -111,6 +111,7 @@ function createElements() {
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Settings_Button_Container';
   document.getElementById('Key_Bindings_Container').innerText = 'Press \' f2 \' to open or close the visualizer menu';
   document.getElementById('Settings_Button_Container').innerText = 'Click here to customize';
+  //document.getElementById('Settings_Button_Container').addEventListener('click', () => { setActiveVisualizer(0); });
 
   document.body.appendChild(document.createElement('div')).id = 'Notifications_Banner';
 
@@ -588,7 +589,6 @@ function keyPressed(e) {
   }
 
   if (keysPressed.includes(escapeKey) && document.getElementById('Menu_Background').style.display == 'flex') {
-    switchDarkMode();
     toggleMenu();
   } else if (keysPressed.includes(escapeKey) && document.getElementById('Menu_Background').style.display == 'none') {
     turnOffAllVisualizers();
