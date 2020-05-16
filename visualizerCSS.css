@@ -260,6 +260,7 @@ put css in here to reduce the amout of dom manipulation in the js file
     z-index:1600;
     background-color: rgba(0,0,0,0.4);
     transition: opacity 0.5s;
+    overflow-y: scroll;
 }
 
 #settings_modal{
@@ -269,6 +270,7 @@ put css in here to reduce the amout of dom manipulation in the js file
     border-radius: 40px;
     font-family:'Roboto', sans-serif;
     padding-bottom:50px;
+    min-width: 1050px;
 }
 
 #settings_title{

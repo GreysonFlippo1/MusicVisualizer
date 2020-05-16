@@ -34,7 +34,7 @@ let userPreferences = {
   allow_google_music: true,
   allow_youtube_music: true,
   allow_other: false,
-  dark_mode: true,
+  dark_mode: false,
 };
 
 const mediaElements = [];
@@ -147,7 +147,6 @@ function createElements() {
   document.getElementById('settings_modal').appendChild(document.createElement('div')).id = 'settings_title';
   document.getElementById('settings_title').innerHTML = '<span id="back_button">&#8592;</span>Settings';
   document.getElementById('back_button').addEventListener('click', () => { hideSettings() });
-  createSettings()
 
   document.body.appendChild(document.createElement('canvas')).id = 'canvas1';
 
@@ -163,8 +162,9 @@ function createElements() {
 function retireveSettings() {
   try {
     // eslint-disable-next-line no-undef
-    chrome.storage.local.get(['artClipping', 'colorCycle'], function(result) {
+    chrome.storage.local.get(Object.keys(userPreferences), function(result) {
       userPreferences = {...userPreferences, ...result};
+      createSettings();
     });
   } catch (error) {
     console.log('No Data To Retrieve: ', error);
@@ -553,24 +553,24 @@ function toggleSwitch(setting) {
   updateSettings({[setting.setting_value]: newSetting});
 }
 
-// artClipping: true,
-// colorCycle: true,
-// auto_connect: true,
-// show_banner: true,
 // primary_color: null,
 // max_height: 110,
 // smoothingTimeConstant: 0,
-// allow_youtube: true,
-// allow_google_music: true,
-// allow_youtube_music: true,
 // allow_other: false,
 
+// show_banner: true,
 // dark_mode: true,
+// artClipping: true,
+// colorCycle: true,
+// auto_connect: true,
+// allow_google_music: true,
+// allow_youtube: true,
+// allow_youtube_music: true,
 
 const settings = [
   {
       name: 'dark_theme',
-      title: 'Dark Theme',
+      title: 'Dark Theme Google Play Music',
       type: 'toggle',
       setting_value: 'dark_mode',
       gpm_exclusive: true,
@@ -587,6 +587,48 @@ const settings = [
     title: 'Allow Waveform Color Cycling',
     type: 'toggle',
     setting_value: 'colorCycle',
+    gpm_exclusive: false,
+  },
+  {
+    name: 'auto_connect',
+    title: 'Connect To Audio',
+    type: 'toggle',
+    setting_value: 'auto_connect',
+    gpm_exclusive: false,
+  },
+  {
+    name: 'allow_google_music',
+    title: 'Connect With Google Play Music',
+    type: 'toggle',
+    setting_value: 'allow_google_music',
+    gpm_exclusive: false,
+  },
+  {
+    name: 'allow_youtube',
+    title: 'Connect With YouTube Video',
+    type: 'toggle',
+    setting_value: 'allow_youtube',
+    gpm_exclusive: false,
+  },
+  {
+    name: 'allow_youtube_music',
+    title: 'Connect With YouTube Music',
+    type: 'toggle',
+    setting_value: 'allow_youtube_music',
+    gpm_exclusive: false,
+  },
+  // {
+  //   name: 'allow_other',
+  //   title: 'Try To Connect On Any Website',
+  //   type: 'toggle',
+  //   setting_value: 'allow_other',
+  //   gpm_exclusive: false,
+  // },
+  {
+    name: 'show_banner',
+    title: 'Show Audio Connection Banner',
+    type: 'toggle',
+    setting_value: 'show_banner',
     gpm_exclusive: false,
   }
 ]
@@ -610,12 +652,14 @@ function createNumberBox(setting) {
 
 function createSettings() {
   settings.map(setting => {
-    document.getElementById('settings_modal').appendChild(document.createElement('div')).id = setting.name;
-    document.getElementById(setting.name).classList.add('setting');
-    document.getElementById(setting.name).innerText = setting.title;
-    // eslint-disable-next-line brace-style
-    if (setting.type == 'toggle') { createToggle(setting) }
-    else if (setting.type == 'number') { createNumberBox(setting) }
+    if ((websiteConfig.name == 'Google-Play-Music-Config' && setting.gpm_exclusive) || !setting.gpm_exclusive) {
+      document.getElementById('settings_modal').appendChild(document.createElement('div')).id = setting.name;
+      document.getElementById(setting.name).classList.add('setting');
+      document.getElementById(setting.name).innerText = setting.title;
+      // eslint-disable-next-line brace-style
+      if (setting.type == 'toggle') { createToggle(setting) }
+      else if (setting.type == 'number') { createNumberBox(setting) }
+    }
   })
 }
 
