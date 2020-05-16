@@ -54,10 +54,6 @@ function loaded() {
   createElements();
   updateGUI();
   setInterval(updateGUI, 250);
-  findAudioSources();
-  setInterval(findAudioSources, 5000);
-  findActiveAudioSource();
-  setInterval(findActiveAudioSource, 250);
 }
 
 
@@ -165,6 +161,10 @@ function retireveSettings() {
     chrome.storage.local.get(Object.keys(userPreferences), function(result) {
       userPreferences = {...userPreferences, ...result};
       createSettings();
+      findAudioSources();
+      setInterval(findAudioSources, 5000);
+      findActiveAudioSource();
+      setInterval(findActiveAudioSource, 250);
     });
   } catch (error) {
     console.log('No Data To Retrieve: ', error);
@@ -253,42 +253,45 @@ function updateGUI() {
 }
 
 function findAudioSources() {
-  const prevMediaElementsLength = mediaElements.length;
-  const audioElements = document.getElementsByTagName('audio');
-  const videoElements = document.getElementsByTagName('video');
-  const foundMediaElements = [...audioElements, ...videoElements];
-  for (let i = 0; i < foundMediaElements.length; i++) {
-    if (foundMediaElements[i].id == null || foundMediaElements[i].id == '') {
-      foundMediaElements[i].id = 'mediaElement' + mediaElements.length;
+  const site = websiteConfig.name
+  const connect = (userPreferences.auto_connect && ((site === 'Google-Play-Music-Config' && userPreferences.allow_google_music) || (site === 'YouTube-Music-Config' && userPreferences.allow_youtube_music) || (site === 'YouTube-Config' && userPreferences.allow_youtube) || (site === 'Default-Config' && userPreferences.allow_other)))
+  if (connect) {
+    const prevMediaElementsLength = mediaElements.length;
+    const audioElements = document.getElementsByTagName('audio');
+    const videoElements = document.getElementsByTagName('video');
+    const foundMediaElements = [...audioElements, ...videoElements];
+    for (let i = 0; i < foundMediaElements.length; i++) {
+      if (foundMediaElements[i].id == null || foundMediaElements[i].id == '') {
+        foundMediaElements[i].id = 'mediaElement' + mediaElements.length;
 
-      const audioCtx = new AudioContext();
-      const analyser = audioCtx.createAnalyser();
-      analyser.smoothingTimeConstant = userPreferences.smoothingTimeConstant;
-      const source = audioCtx.createMediaElementSource(foundMediaElements[i]);
-      source.connect(analyser);
-      analyser.connect(audioCtx.destination);
-      analyser.fftSize = websiteConfig.fftUni;
-      const frequencyData = new Uint8Array(analyser.frequencyBinCount);
-      const bufferLength = analyser.frequencyBinCount;
-      const dataArray = new Uint8Array(bufferLength);
+        const audioCtx = new AudioContext();
+        const analyser = audioCtx.createAnalyser();
+        analyser.smoothingTimeConstant = userPreferences.smoothingTimeConstant;
+        const source = audioCtx.createMediaElementSource(foundMediaElements[i]);
+        source.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        analyser.fftSize = websiteConfig.fftUni;
+        const frequencyData = new Uint8Array(analyser.frequencyBinCount);
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
 
-      mediaElements[mediaElements.length] = {
-        node: foundMediaElements[i],
-        attached: true,
-        audioCtx,
-        analyser,
-        frequencyData,
-        bufferLength,
-        dataArray,
-      };
+        mediaElements[mediaElements.length] = {
+          node: foundMediaElements[i],
+          attached: true,
+          audioCtx,
+          analyser,
+          frequencyData,
+          bufferLength,
+          dataArray,
+        };
+      }
     }
-  }
-
     //new media elements hooked
     if (prevMediaElementsLength < mediaElements.length) {
       const txt = '' + mediaElements.length + ' Audio Sources Connected <br> Press \' f2 \' To Show The Visualizer Menu';
-      showBanner(txt);
+      userPreferences.show_banner && showBanner(txt);
     }
+  }
 }
 
 function showBanner(txt) {
