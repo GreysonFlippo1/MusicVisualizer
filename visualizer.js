@@ -111,7 +111,7 @@ function createElements() {
   document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Settings_Button_Container';
   document.getElementById('Key_Bindings_Container').innerText = 'Press \' f2 \' to open or close the visualizer menu';
   document.getElementById('Settings_Button_Container').innerText = 'Click here to customize';
-  //document.getElementById('Settings_Button_Container').addEventListener('click', () => { setActiveVisualizer(0); });
+  document.getElementById('Settings_Button_Container').addEventListener('click', () => { showSettings(); });
 
   document.body.appendChild(document.createElement('div')).id = 'Notifications_Banner';
 
@@ -146,6 +146,8 @@ function createElements() {
   document.getElementById('settings_modal_background').appendChild(document.createElement('div')).id = 'settings_modal';
   document.getElementById('settings_modal').appendChild(document.createElement('div')).id = 'settings_title';
   document.getElementById('settings_title').innerHTML = '<span id="back_button">&#8592;</span>Settings';
+  document.getElementById('back_button').addEventListener('click', () => { hideSettings() });
+  createSettings()
 
   document.body.appendChild(document.createElement('canvas')).id = 'canvas1';
 
@@ -176,16 +178,6 @@ function updateSettings(settings) {
   });
 }
 
-function toggleAlbumArtClipping() {
-  const newSetting = !userPreferences.artClipping;
-  updateSettings({artClipping: newSetting});
-}
-
-function toggleColorCycling() {
-  const newSetting = !userPreferences.colorCycle;
-  updateSettings({colorCycle: newSetting});
-}
-
 function setAlbumArtClick() {
   if (document.getElementById('playerBarArt')) {
     document.getElementById('playerBarArt').addEventListener('click', toggleArtBackground);
@@ -197,8 +189,6 @@ function setAlbumArtClick() {
     }
   }
 }
-
-
 
 function toggleArtBackground() {
   if (!document.getElementById('artBackground')) {
@@ -245,6 +235,8 @@ function updateGUI() {
       document.querySelector('#content-container').style.backgroundColor = '#eeeeee';
       document.getElementById('ambience1').style.filter = 'invert(1)';
       document.getElementById('Menu_Background').style.filter = 'invert(1)';
+      document.getElementById('Notifications_Banner').style.filter = 'invert(1)';
+      document.getElementById('settings_modal_background').style.filter = 'invert(1)';
       if (document.getElementById('artBackground')) document.getElementById('artBackground').style.filter = 'grayscale(20%) invert(1)';
       invertImages(true);
     } else {
@@ -252,6 +244,8 @@ function updateGUI() {
       document.querySelector('#content-container').style.backgroundColor = null;
       document.getElementById('ambience1').style.filter = 'invert(0)';
       document.getElementById('Menu_Background').style.filter = 'invert(0)';
+      document.getElementById('Notifications_Banner').style.filter = 'invert(0)';
+      document.getElementById('settings_modal_background').style.filter = 'invert(0)';
       if (document.getElementById('artBackground')) document.getElementById('artBackground').style.filter = 'grayscale(20%)';
       invertImages(false);
     }
@@ -532,15 +526,97 @@ function turnOffAllVisualizers() {
   }
 }
 
-function switchDarkMode() {
-  userPreferences.dark_mode ? userPreferences.dark_mode = false : userPreferences.dark_mode = true;
-}
-
 function invertImages(invert) {
   const images = document.getElementsByTagName('img');
   for (let i = 0; i < images.length; i++) {
     invert ? images[i].classList.add('invertedImages') : images[i].classList.remove('invertedImages');
   }
+}
+
+function showSettings() {
+  document.getElementById('settings_modal_background').style.display = 'flex';
+  setTimeout(() => {
+      document.getElementById('settings_modal_background').style.opacity = 1;
+  }, 1)
+}
+
+function hideSettings() {
+  document.getElementById('settings_modal_background').style.opacity = 0;
+  setTimeout(() => {
+      document.getElementById('settings_modal_background').style.display = 'none';
+  }, 500)
+}
+
+function toggleSwitch(setting) {
+  const newSetting = !userPreferences[setting.setting_value];
+  newSetting ? document.getElementById(setting.name + '_switch').classList.remove('off') : document.getElementById(setting.name + '_switch').classList.add('off')
+  updateSettings({[setting.setting_value]: newSetting});
+}
+
+// artClipping: true,
+// colorCycle: true,
+// auto_connect: true,
+// show_banner: true,
+// primary_color: null,
+// max_height: 110,
+// smoothingTimeConstant: 0,
+// allow_youtube: true,
+// allow_google_music: true,
+// allow_youtube_music: true,
+// allow_other: false,
+
+// dark_mode: true,
+
+const settings = [
+  {
+      name: 'dark_theme',
+      title: 'Dark Theme',
+      type: 'toggle',
+      setting_value: 'dark_mode',
+      gpm_exclusive: true,
+  },
+  {
+    name: 'art_clipping',
+    title: 'Fullscreen Album Art',
+    type: 'toggle',
+    setting_value: 'artClipping',
+    gpm_exclusive: true,
+  },
+  {
+    name: 'color_cycle',
+    title: 'Allow Waveform Color Cycling',
+    type: 'toggle',
+    setting_value: 'colorCycle',
+    gpm_exclusive: false,
+  }
+]
+
+function createToggle(setting) {
+  document.getElementById(setting.name).appendChild(document.createElement('div')).id = setting.name + '_switch';
+  document.getElementById(setting.name + '_switch').classList.add('switch');
+  document.getElementById(setting.name + '_switch').appendChild(document.createElement('div')).classList.add('switch_handle');
+  document.getElementById(setting.name + '_switch').addEventListener('click', () => { toggleSwitch(setting) })
+  // eslint-disable-next-line no-unused-expressions
+  userPreferences[setting.setting_value] == false ? document.getElementById(setting.name + '_switch').classList.add('off') : null;
+}
+
+function createNumberBox(setting) {
+  document.getElementById(setting.name).appendChild(document.createElement('input')).id = setting.name + '_number';
+  document.getElementById(setting.name + '_number').classList.add('number_box');
+  document.getElementById(setting.name + '_number').type = 'number';
+  document.getElementById(setting.name + '_number').addEventListener('blur', () => { setting.event() })
+  document.getElementById(setting.name + '_number').value = userPreferences[setting.setting_value];
+}
+
+function createSettings() {
+  settings.map(setting => {
+    document.getElementById('settings_modal').appendChild(document.createElement('div')).id = setting.name;
+    document.getElementById(setting.name).classList.add('setting');
+    document.getElementById(setting.name).innerText = setting.title;
+    // eslint-disable-next-line brace-style
+    if (setting.type == 'toggle') { createToggle(setting) }
+    else if (setting.type == 'number') { createNumberBox(setting) }
+  })
 }
 
 

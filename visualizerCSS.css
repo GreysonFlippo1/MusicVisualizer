@@ -259,7 +259,7 @@ put css in here to reduce the amout of dom manipulation in the js file
     align-items: center;
     z-index:1600;
     background-color: rgba(0,0,0,0.4);
-    transition:opacity 0.5s;
+    transition: opacity 0.5s;
 }
 
 #settings_modal{
