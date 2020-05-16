@@ -569,11 +569,11 @@ function toggleSwitch(setting) {
 
 const settings = [
   {
-      name: 'dark_theme',
-      title: 'Dark Theme Google Play Music',
-      type: 'toggle',
-      setting_value: 'dark_mode',
-      gpm_exclusive: true,
+    name: 'dark_theme',
+    title: 'Dark Theme',
+    type: 'toggle',
+    setting_value: 'dark_mode',
+    gpm_exclusive: false,
   },
   {
     name: 'art_clipping',
