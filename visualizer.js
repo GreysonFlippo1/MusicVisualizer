@@ -671,9 +671,9 @@ function keyPressed(e) {
     setActiveVisualizer(3);
   }
 
-  if (keysPressed.includes(escapeKey) && document.getElementById('Menu_Background').style.display == 'flex') {
-    toggleSettings();
-  } else if (keysPressed.includes(escapeKey) && document.getElementById('Menu_Background').style.display == 'none') {
+  if (keysPressed.includes(escapeKey) && document.getElementById('settings_modal_background').style.display == 'flex') {
+    hideSettings();
+  } else if (keysPressed.includes(escapeKey) && document.getElementById('settings_modal_background').style.display == 'none') {
     turnOffAllVisualizers();
   }
 
