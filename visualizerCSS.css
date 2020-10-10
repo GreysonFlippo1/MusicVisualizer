@@ -48,6 +48,8 @@ put css in here to reduce the amout of dom manipulation in the js file
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    margin-top: 60px;
+    margin-bottom: 30px;
 }
 
 .Button{
@@ -251,14 +253,30 @@ put css in here to reduce the amout of dom manipulation in the js file
     padding-top:20px;
     padding-bottom:20px;
     margin-bottom: 20px;
+    position: relative;
+    padding-left: 80px;
 }
 
 #back_button{
     color:#ffffff;
     font-size: 50px;
-    margin-left:100px;
-    margin-right:50px;
     cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: -65px;
+    border: 2px solid white;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    line-height: 43px;
+    text-align: center;
+    font-weight: 100;
+    padding-left: 1px;
+    padding-right: -1px;
+}
+
+#back_button.Button:hover{
+    background-color: #222222;
 }
 
 .setting{

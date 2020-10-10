@@ -97,7 +97,7 @@ function createElements() {
     }
   });
 
-  document.getElementById('settings_title').innerHTML = '<span id="back_button">&#8592;</span>Settings';
+  document.getElementById('settings_title').innerHTML = '<div id="back_button">&#215;</div>Visualizer Settings';
   document.getElementById('back_button').addEventListener('click', () => { hideSettings() });
 
   document.getElementById('settings_modal').appendChild(document.createElement('div')).id = 'vizualizer_button_container';
@@ -198,7 +198,6 @@ function updateArtWallpaperSource() {
 }
 
 function updateGUI() {
-  // document.getElementById('Audio_Source_Identifier_Container').innerText = mediaElements.length + ' Audio Source(s) Connected';
   document.getElementById('canvas1').style.height = window.innerHeight - websiteConfig.bottom + 'px';
   document.getElementById('canvas1').setAttribute('height', window.innerHeight - websiteConfig.bottom);
   document.getElementById('canvas1').setAttribute('width', window.innerWidth);
