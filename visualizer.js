@@ -557,42 +557,36 @@ const settings = [
     title: 'Connect To Audio',
     type: 'toggle',
     setting_value: 'auto_connect',
-    gpm_exclusive: false,
   },
   {
     name: 'allow_youtube_music',
     title: 'Connect With YouTube Music',
     type: 'toggle',
     setting_value: 'allow_youtube_music',
-    gpm_exclusive: false,
   },
   {
     name: 'allow_google_music',
     title: 'Connect With Google Play Music',
     type: 'toggle',
     setting_value: 'allow_google_music',
-    gpm_exclusive: false,
   },
   {
     name: 'allow_youtube',
     title: 'Connect With YouTube Video',
     type: 'toggle',
     setting_value: 'allow_youtube',
-    gpm_exclusive: false,
   },
   // {
   //   name: 'allow_other',
   //   title: 'Try To Connect On Any Website',
   //   type: 'toggle',
   //   setting_value: 'allow_other',
-  //   gpm_exclusive: false,
   // },
   {
     name: 'show_banner',
     title: 'Show Audio Connection Banner',
     type: 'toggle',
     setting_value: 'show_banner',
-    gpm_exclusive: false,
   }
 ]
 
