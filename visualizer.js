@@ -34,7 +34,6 @@ let userPreferences = {
   allow_google_music: true,
   allow_youtube_music: true,
   allow_other: false,
-  dark_mode: false,
 };
 
 const mediaElements = [];
@@ -71,7 +70,7 @@ function getCurrentPage(url) {
     return {
       name: 'YouTube-Music-Config',
       color: '#FFFFFF',
-      fftUni: 16384,
+      fftUni: 8192,
       bottom: 83,
     };
   } else if (url.includes('youtube')) {
@@ -229,25 +228,6 @@ function updateGUI() {
         <p id="wtitle1">${document.getElementById('currently-playing-title').innerHTML}</p>
         <p id="wtitle2">${document.getElementsByClassName('player-artist')[0].innerHTML + ' - ' + document.getElementsByClassName('player-album')[0].innerHTML}</p>
         <div id="backgroundShade"></div>`;
-    }
-    if (userPreferences.dark_mode) {
-      document.body.style.filter = 'invert(1)';
-      document.querySelector('#content-container').style.backgroundColor = '#eeeeee';
-      document.getElementById('ambience1').style.filter = 'invert(1)';
-      document.getElementById('Menu_Background').style.filter = 'invert(1)';
-      document.getElementById('Notifications_Banner').style.filter = 'invert(1)';
-      document.getElementById('settings_modal_background').style.filter = 'invert(1)';
-      if (document.getElementById('artBackground')) document.getElementById('artBackground').style.filter = 'grayscale(20%) invert(1)';
-      invertImages(true);
-    } else {
-      document.body.style.filter = 'invert(0)';
-      document.querySelector('#content-container').style.backgroundColor = null;
-      document.getElementById('ambience1').style.filter = 'invert(0)';
-      document.getElementById('Menu_Background').style.filter = 'invert(0)';
-      document.getElementById('Notifications_Banner').style.filter = 'invert(0)';
-      document.getElementById('settings_modal_background').style.filter = 'invert(0)';
-      if (document.getElementById('artBackground')) document.getElementById('artBackground').style.filter = 'grayscale(20%)';
-      invertImages(false);
     }
   }
 }
@@ -417,7 +397,6 @@ function waveVis() {
   const HEIGHT = window.innerHeight - websiteConfig.bottom;
     if (websiteConfig.name == 'YouTube-Config') {
       document.getElementById('content').onload = function() { console.log('Music Visualizer: YouTube'); };
-      if (userPreferences.dark_mode) document.getElementById('canvas1').style.backgroundColor = 'black';
     }
     if (userPreferences.colorCycle) {
       if (red == 255) {
@@ -562,7 +541,6 @@ function toggleSwitch(setting) {
 // allow_other: false,
 
 // show_banner: true,
-// dark_mode: true,
 // artClipping: true,
 // colorCycle: true,
 // auto_connect: true,
@@ -571,13 +549,6 @@ function toggleSwitch(setting) {
 // allow_youtube_music: true,
 
 const settings = [
-  {
-    name: 'dark_theme',
-    title: 'Dark Theme',
-    type: 'toggle',
-    setting_value: 'dark_mode',
-    gpm_exclusive: false,
-  },
   {
     name: 'art_clipping',
     title: 'Fullscreen Album Art',

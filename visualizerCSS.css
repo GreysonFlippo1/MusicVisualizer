@@ -123,7 +123,7 @@ put css in here to reduce the amout of dom manipulation in the js file
     position: fixed;
     top: 0px;
     left: 0px;
-    background-color:white;
+    background-color:#000000;
     width:100%;
     display: none;
 }
