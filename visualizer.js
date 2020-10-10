@@ -6,15 +6,6 @@
 // updated 5-10-2020
 // https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
-// eslint-disable-next-line no-undef
-const bar_visualizer_image = chrome.extension.getURL('Bar_Viz.png');
-// eslint-disable-next-line no-undef
-const wave_visualizer_image = chrome.extension.getURL('Wave_Viz.png');
-// eslint-disable-next-line no-undef
-const circle_visualizer_image = chrome.extension.getURL('Circle_Viz.png');
-// eslint-disable-next-line no-undef
-const ambient_visualizer_image = chrome.extension.getURL('Ambient_Viz.png');
-
 let websiteConfig = {
   name: 'Default-Config',
   color: '#aaaaaa',
@@ -71,7 +62,7 @@ function getCurrentPage(url) {
       name: 'YouTube-Music-Config',
       color: '#FFFFFF',
       fftUni: 8192,
-      bottom: 83,
+      bottom: 72,
     };
   } else if (url.includes('youtube')) {
     return {
@@ -93,55 +84,46 @@ function getCurrentPage(url) {
 
 
 function createElements() {
-  document.body.appendChild(document.createElement('div')).id = 'Menu_Background';
-  document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Menu_Container';
-  document.getElementById('Menu_Background').addEventListener('click', (e) => {
-    if (e.target.id === 'Menu_Background') {
-      toggleMenu();
-    }
-  });
-
-  document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Audio_Source_Identifier_Container';
-  document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Key_Bindings_Container';
-  document.getElementById('Menu_Background').appendChild(document.createElement('div')).id = 'Settings_Button_Container';
-  document.getElementById('Key_Bindings_Container').innerText = 'Press \' f2 \' to open or close the visualizer menu';
-  document.getElementById('Settings_Button_Container').innerText = 'Click here to customize';
-  document.getElementById('Settings_Button_Container').addEventListener('click', () => { showSettings(); });
 
   document.body.appendChild(document.createElement('div')).id = 'Notifications_Banner';
-
-  document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Bar_Visualizer_Button';
-  document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Wave_Visualizer_Button';
-  document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Circle_Visualizer_Button';
-  document.getElementById('Menu_Container').appendChild(document.createElement('div')).id = 'Ambient_Visualizer_Button';
-
-  visualizerToggleButtons = [document.getElementById('Bar_Visualizer_Button'), document.getElementById('Wave_Visualizer_Button'), document.getElementById('Circle_Visualizer_Button'), document.getElementById('Ambient_Visualizer_Button')];
-
-  document.getElementById('Bar_Visualizer_Button').classList.add('Button');
-  document.getElementById('Bar_Visualizer_Button').style.backgroundImage = 'url(\'' + bar_visualizer_image + '\')';
-  document.getElementById('Bar_Visualizer_Button').addEventListener('click', () => { setActiveVisualizer(0); });
-  document.getElementById('Bar_Visualizer_Button').innerHTML = '<span id=\'Bar_Visualizer_Title\' class=\'Button_Title\'>Bar</span><span id=\'Bar_Visualizer_Text\' class=\'Button_Text\'>control + 1</span>';
-
-  document.getElementById('Wave_Visualizer_Button').classList.add('Button');
-  document.getElementById('Wave_Visualizer_Button').style.backgroundImage = 'url(\'' + wave_visualizer_image + '\')';
-  document.getElementById('Wave_Visualizer_Button').addEventListener('click', () => { setActiveVisualizer(1); });
-  document.getElementById('Wave_Visualizer_Button').innerHTML = '<span id=\'Wave_Visualizer_Title\' class=\'Button_Title\'>Wave</span><span id=\'Wave_Visualizer_Text\' class=\'Button_Text\'>control + 2</span>';
-
-  document.getElementById('Circle_Visualizer_Button').classList.add('Button');
-  document.getElementById('Circle_Visualizer_Button').style.backgroundImage = 'url(\'' + circle_visualizer_image + '\')';
-  document.getElementById('Circle_Visualizer_Button').addEventListener('click', () => { setActiveVisualizer(2); });
-  document.getElementById('Circle_Visualizer_Button').innerHTML = '<span id=\'Circle_Visualizer_Title\' class=\'Button_Title\'>Circle</span><span id=\'Circle_Visualizer_Text\' class=\'Button_Text\'>control + 3</span>';
-
-  document.getElementById('Ambient_Visualizer_Button').classList.add('Button');
-  document.getElementById('Ambient_Visualizer_Button').style.backgroundImage = 'url(\'' + ambient_visualizer_image + '\')';
-  document.getElementById('Ambient_Visualizer_Button').addEventListener('click', () => { setActiveVisualizer(3); });
-  document.getElementById('Ambient_Visualizer_Button').innerHTML = '<span id=\'Ambient_Visualizer_Title\' class=\'Button_Title\'>Ambient</span><span id=\'Ambient_Visualizer_Text\' class=\'Button_Text\'>control + 4</span>';
 
   document.body.appendChild(document.createElement('div')).id = 'settings_modal_background';
   document.getElementById('settings_modal_background').appendChild(document.createElement('div')).id = 'settings_modal';
   document.getElementById('settings_modal').appendChild(document.createElement('div')).id = 'settings_title';
+
+  document.getElementById('settings_modal_background').addEventListener('click', (e) => {
+    if (e.target.id === 'settings_modal_background') {
+      hideSettings();
+    }
+  });
+
   document.getElementById('settings_title').innerHTML = '<span id="back_button">&#8592;</span>Settings';
   document.getElementById('back_button').addEventListener('click', () => { hideSettings() });
+
+  document.getElementById('settings_modal').appendChild(document.createElement('div')).id = 'vizualizer_button_container';
+
+  document.getElementById('vizualizer_button_container').appendChild(document.createElement('div')).id = 'Bar_Visualizer_Button';
+  document.getElementById('vizualizer_button_container').appendChild(document.createElement('div')).id = 'Wave_Visualizer_Button';
+  document.getElementById('vizualizer_button_container').appendChild(document.createElement('div')).id = 'Circle_Visualizer_Button';
+  document.getElementById('vizualizer_button_container').appendChild(document.createElement('div')).id = 'Ambient_Visualizer_Button';
+
+  visualizerToggleButtons = [document.getElementById('Bar_Visualizer_Button'), document.getElementById('Wave_Visualizer_Button'), document.getElementById('Circle_Visualizer_Button'), document.getElementById('Ambient_Visualizer_Button')];
+
+  document.getElementById('Bar_Visualizer_Button').classList.add('Button');
+  document.getElementById('Bar_Visualizer_Button').addEventListener('click', () => { setActiveVisualizer(0); });
+  document.getElementById('Bar_Visualizer_Button').innerHTML = 'Bars';
+
+  document.getElementById('Wave_Visualizer_Button').classList.add('Button');
+  document.getElementById('Wave_Visualizer_Button').addEventListener('click', () => { setActiveVisualizer(1); });
+  document.getElementById('Wave_Visualizer_Button').innerHTML = 'Wave';
+
+  document.getElementById('Circle_Visualizer_Button').classList.add('Button');
+  document.getElementById('Circle_Visualizer_Button').addEventListener('click', () => { setActiveVisualizer(2); });
+  document.getElementById('Circle_Visualizer_Button').innerHTML = 'Circle';
+
+  document.getElementById('Ambient_Visualizer_Button').classList.add('Button');
+  document.getElementById('Ambient_Visualizer_Button').addEventListener('click', () => { setActiveVisualizer(3); });
+  document.getElementById('Ambient_Visualizer_Button').innerHTML = 'Ambience';
 
   document.body.appendChild(document.createElement('canvas')).id = 'canvas1';
 
@@ -216,7 +198,8 @@ function updateArtWallpaperSource() {
 }
 
 function updateGUI() {
-  document.getElementById('Audio_Source_Identifier_Container').innerText = mediaElements.length + ' Audio Source(s) Connected';
+  // document.getElementById('Audio_Source_Identifier_Container').innerText = mediaElements.length + ' Audio Source(s) Connected';
+  document.getElementById('canvas1').style.height = window.innerHeight - websiteConfig.bottom + 'px';
   document.getElementById('canvas1').setAttribute('height', window.innerHeight - websiteConfig.bottom);
   document.getElementById('canvas1').setAttribute('width', window.innerWidth);
   if (websiteConfig.name == 'Google-Play-Music-Config') {
@@ -415,9 +398,7 @@ function waveVis() {
     mediaElements[activeSource].analyser.getByteTimeDomainData(mediaElements[activeSource].dataArray);
     canvasCtx.width = WIDTH;
     canvasCtx.height = HEIGHT;
-    document.getElementById('canvas1').setAttribute('width', window.innerWidth);
-    document.getElementById('canvas1').setAttribute('height', window.innerHeight - websiteConfig.bottom);
-    canvasCtx.fillStyle = 'rgba(0, 0, 0, 0)';
+    canvasCtx.fillStyle = 'rgba(0, 0, 0, 1)';
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
     canvasCtx.strokeStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
     canvasCtx.lineWidth = 3000 / window.innerHeight;
@@ -481,13 +462,13 @@ function toggleAmbienceViz() {
 }
 
 
-function toggleMenu() {
-  if (document.getElementById('Menu_Background').style.display == 'flex') {
-    document.getElementById('Menu_Background').style.display = 'none';
-  } else {
-    document.getElementById('Menu_Background').style.display = 'flex';
-  }
-}
+// function toggleMenu() {
+//   if (document.getElementById('Menu_Background').style.display == 'flex') {
+//     document.getElementById('Menu_Background').style.display = 'none';
+//   } else {
+//     document.getElementById('Menu_Background').style.display = 'flex';
+//   }
+// }
 
 function setActiveVisualizer(vizNum) {
   if (!visualizerToggles[vizNum]) {
@@ -508,10 +489,19 @@ function turnOffAllVisualizers() {
   }
 }
 
-function invertImages(invert) {
-  const images = document.getElementsByTagName('img');
-  for (let i = 0; i < images.length; i++) {
-    invert ? images[i].classList.add('invertedImages') : images[i].classList.remove('invertedImages');
+// function invertImages(invert) {
+//   const images = document.getElementsByTagName('img');
+//   for (let i = 0; i < images.length; i++) {
+//     invert ? images[i].classList.add('invertedImages') : images[i].classList.remove('invertedImages');
+//   }
+// }
+
+function toggleSettings() {
+  console.log(document.getElementById('settings_modal_background').style.display == 'flex')
+  if (document.getElementById('settings_modal_background').style.display == 'flex') {
+    hideSettings()
+  } else {
+    showSettings()
   }
 }
 
@@ -663,7 +653,7 @@ function keyPressed(e) {
   }
 
   if (keysPressed.includes(openVisualizerKey)) {
-    toggleMenu();
+    toggleSettings();
   }
 
   if (keysPressed.includes(secondaryKey) && keysPressed.includes(viz1Key)) {
@@ -683,7 +673,7 @@ function keyPressed(e) {
   }
 
   if (keysPressed.includes(escapeKey) && document.getElementById('Menu_Background').style.display == 'flex') {
-    toggleMenu();
+    toggleSettings();
   } else if (keysPressed.includes(escapeKey) && document.getElementById('Menu_Background').style.display == 'none') {
     turnOffAllVisualizers();
   }
