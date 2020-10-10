@@ -560,6 +560,13 @@ const settings = [
     gpm_exclusive: false,
   },
   {
+    name: 'allow_youtube_music',
+    title: 'Connect With YouTube Music',
+    type: 'toggle',
+    setting_value: 'allow_youtube_music',
+    gpm_exclusive: false,
+  },
+  {
     name: 'allow_google_music',
     title: 'Connect With Google Play Music',
     type: 'toggle',
@@ -571,13 +578,6 @@ const settings = [
     title: 'Connect With YouTube Video',
     type: 'toggle',
     setting_value: 'allow_youtube',
-    gpm_exclusive: false,
-  },
-  {
-    name: 'allow_youtube_music',
-    title: 'Connect With YouTube Music',
-    type: 'toggle',
-    setting_value: 'allow_youtube_music',
     gpm_exclusive: false,
   },
   // {
