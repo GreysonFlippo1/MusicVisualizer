@@ -155,8 +155,7 @@ function retireveSettings() {
 function updateSettings(settings) {
   userPreferences = {...userPreferences, ...settings};
   // eslint-disable-next-line no-undef
-  chrome.storage.local.set({...userPreferences}, function() {
-  });
+  chrome.storage.local.set({...userPreferences});
 }
 
 function setAlbumArtClick() {
@@ -414,7 +413,7 @@ function waveVis() {
     let lasty = HEIGHT / 2;
 
     for (let i = mediaElements[activeSource].bufferLength / 2; i < mediaElements[activeSource].bufferLength; i++) {
-      const v = mediaElements[activeSource].dataArray[i] / 128.0;
+      const v = (((mediaElements[activeSource].dataArray[i] / 128.0) - 1) * (userPreferences.max_height / 100)) + 1;
       const radius2 = radius1 + (v * v * 150) * (HEIGHT / 1500);
       const y = v * HEIGHT / 2;
       if (visualizerToggles[2]) {
