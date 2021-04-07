@@ -617,8 +617,8 @@ function createNumberBox(setting) {
   const numberBox = document.getElementById(setting.name + '_number')
   numberBox.classList.add('number_box');
   numberBox.type = 'number';
-  numberBox.addEventListener('blur', () => { setting.event(setting.setting_value, numberBox.value) })
-  numberBox.value = userPreferences[setting.setting_value];
+  numberBox.addEventListener('blur', () => { setting.event(setting.setting_value, numberBox.value * 100) })
+  numberBox.value = userPreferences[setting.setting_value] / 100;
 }
 
 function createSettings() {
