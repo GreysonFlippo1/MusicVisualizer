@@ -1,0 +1,357 @@
+/*
+put css in here to reduce the amout of dom manipulation in the js file
+*/
+#Menu_Background{
+    position: fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    height: 100%;
+    z-index: 1600;
+    background-color: rgba(65, 65, 65, 0.8);
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
+    display:none;
+}
+
+#Audio_Source_Identifier_Container{
+    width: 1170px;
+    height:45px;
+    box-shadow:0px 0px 4px 4px rgba(80,80,80,0.1);
+    background-color: rgba(10,10,10,0.95);
+    color:#aaaaaa;
+    font-family: sans-serif;
+    font-size: 30px;
+    padding-left:30px;
+    padding-top:10px;
+    margin-bottom:20px;
+}
+
+#Key_Bindings_Container{
+    width: 1170px;
+    height:45px;
+    box-shadow:0px 0px 4px 4px rgba(80,80,80,0.1);
+    background-color: rgba(10,10,10,0.95);
+    color:#aaaaaa;
+    font-family: sans-serif;
+    font-size: 30px;
+    padding-left:30px;
+    padding-top:10px;
+    margin-bottom:20px;
+}
+
+#vizualizer_button_container{
+    width: 70%;
+    min-width: 750px;
+    margin-left: 80px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 60px;
+    margin-bottom: 30px;
+}
+
+.Button{
+    color: #aaaaaa;
+    border: 1px solid white;
+    width: calc(50% - 24px);
+    font-size: 30px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.Button:hover{
+    background-color: #222222;
+    cursor:pointer;
+}
+
+.Button_Selected{
+    border: 2px solid rgb(119, 158, 203);
+    width: calc(50% - 26px);
+    padding-top: 14px;
+    padding-bottom: 14px;
+    color: white;
+}
+
+
+.bars{
+    width:12px;
+    height:0px;
+    position: fixed;
+    bottom:90px;
+    background-color: #ffffff;
+    z-index: 1502;
+    opacity: 0.8;
+}
+
+#canvas1{
+    z-index: 1502;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color:#000000;
+    width:100%;
+    display: none;
+}
+
+#ambience1{
+    position:fixed;
+    z-index: 1502;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    display:none;
+    background-color: #000000;
+    overflow: hidden;
+}
+
+#topGlow{
+    position: absolute;
+    z-index: 2;
+    top:-300px;
+    left: 0px;
+    width: 100%;
+    height: 0px;
+}
+
+#bottomGlow{
+    position: absolute;
+    z-index: 2;
+    bottom: -300px;
+    left:0px;
+    width:100%;
+    height: 0px;
+}
+
+#leftGlow{
+    position: absolute;
+    z-index: 2;
+    top:0px;
+    left:-300px;
+    width:0px;
+    height:100%;
+}
+
+#rightGlow{
+    position: absolute;
+    z-index: 2;
+    top:0px;
+    right:-300px;
+    width: 0px;
+    height:100%;
+}
+
+
+#Notifications_Banner{
+    position:fixed;
+    z-index: 2000;
+    /* bottom:100px; */
+    bottom:-100px;
+    left:30%;
+    width:40%;
+    height:40px;
+    padding-top:5px;
+    background-color:rgba(65, 65, 65, 1);
+    color:#dddddd;
+    text-align: center;
+    border-radius: 30px;
+    font-size:15px;
+    transition: bottom .5s;
+}
+
+#artBackground{
+    position:fixed;
+    z-index:1000;
+    width:100%;
+    height:50%;
+    left:0px;
+    top:0px;
+    display:block;
+    background-color: #000000;
+    background-attachment: absolute;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter:grayscale(20%);
+}
+
+#backgroundShade{
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+#wtitle1{
+    position: fixed;
+    z-index: 1500;
+    top:20px;
+    left:100px;
+    color:#ffffff;
+    font-size:90px;
+    font-family: sans-serif;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width:90%;
+}
+
+#wtitle2{
+    position: fixed;
+    z-index: 1500;
+    top:180px;
+    left:100px;
+    color:#ffffff;
+    font-size:30px;
+    font-family: sans-serif;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width:90%;
+}
+
+#settings_modal_background{
+    width:100vw;
+    height:100vh;
+    position: fixed;
+    top:0px;
+    left:0px;
+    display: none;
+    opacity: 0;
+    flex-direction: column;
+    align-items: center;
+    z-index:1600;
+    background-color: rgba(0,0,0,0.4);
+    transition: opacity 0.25s;
+    overflow-y: scroll;
+}
+
+#settings_modal{
+    width:50vw;
+    margin-top:10vh;
+    background-color: #1a1a1a;
+    border-radius: 40px;
+    font-family:'Roboto', sans-serif;
+    padding-bottom:50px;
+    min-width: 1050px;
+}
+
+#settings_title{
+    /* color:#779ecb; */
+    color:#ffffff;
+    font-size: 50px;
+    margin-top:80px;
+    background-color:#222222;
+    padding-top:20px;
+    padding-bottom:20px;
+    margin-bottom: 20px;
+    position: relative;
+    padding-left: 80px;
+}
+
+#back_button{
+    color:#ffffff;
+    font-size: 50px;
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: -65px;
+    border: 2px solid white;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    line-height: 43px;
+    text-align: center;
+    font-weight: 100;
+    padding-left: 1px;
+    padding-right: -1px;
+}
+
+#back_button.Button:hover{
+    background-color: #222222;
+}
+
+.setting{
+    color:#cccccc;
+    font-size:35px;
+    padding-left:80px;
+    position: relative;
+    padding-top:20px;
+    padding-bottom:20px;
+}
+
+.switch{
+    position: absolute;
+    right: 80px;
+    top:25px;
+    height:30px;
+    width:65px;
+    background-color: rgba(119, 158, 203,0.5);
+    border-radius:21px;
+    cursor:pointer;
+    opacity: 1;
+    transition: opacity .3s;
+}
+
+.switch_handle{
+    position: absolute;
+    width:42px;
+    height:42px;
+    background-color: rgb(119, 158, 203);
+    top:-6px;
+    left:23px;
+    border-radius: 50%;
+    transition: left .3s;
+}
+
+.off{
+    opacity: 0.3;
+}
+
+.off div{
+    left:0px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.number_box{
+    position: absolute;
+    top:20px;
+    right:80px;
+    height:42px;
+    font-size:30px;
+    text-align:right;
+    width:200px;
+    border:0px solid rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0);
+    color:#aaaaaa;
+}
+
+.invertedImages{
+    filter: invert(1);
+}
+
+@media screen and (max-width: 1200px) {
+
+    #Audio_Source_Identifier_Container{
+        width: 585px;
+        height:23px;
+        font-size: 15px;
+        padding-left:15px;
+        padding-top:5px;
+        margin-bottom:15px;
+    }
+
+}
