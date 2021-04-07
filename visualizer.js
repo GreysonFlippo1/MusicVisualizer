@@ -3,7 +3,7 @@
 // Ac130veterans@gmail.com
 // GreysonFlippo@gmail.com
 // created 6-6-2016 :)
-// updated 5-10-2020
+// updated 4-6-2021
 // https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
 let websiteConfig = {
