@@ -19,7 +19,7 @@ let userPreferences = {
   auto_connect: true,
   show_banner: true,
   primary_color: null,
-  max_height: 110,
+  max_height: 100,
   smoothingTimeConstant: 0,
   allow_youtube: true,
   allow_google_music: true,
@@ -524,8 +524,12 @@ function toggleSwitch(setting) {
   updateSettings({[setting.setting_value]: newSetting});
 }
 
+function updateNumberSetting(setting_value, value) {
+  updateSettings({[setting_value]: value});
+}
+
 // primary_color: null,
-// max_height: 110,
+// max_height: 100,
 // smoothingTimeConstant: 0,
 // allow_other: false,
 
@@ -544,6 +548,14 @@ const settings = [
     type: 'toggle',
     setting_value: 'artClipping',
     gpm_exclusive: true,
+  },
+  {
+    name: 'max_height',
+    title: 'Height Multiplier',
+    type: 'number',
+    setting_value: 'max_height',
+    gpm_exclusive: false,
+    event: updateNumberSetting,
   },
   {
     name: 'color_cycle',
@@ -592,19 +604,21 @@ const settings = [
 
 function createToggle(setting) {
   document.getElementById(setting.name).appendChild(document.createElement('div')).id = setting.name + '_switch';
-  document.getElementById(setting.name + '_switch').classList.add('switch');
-  document.getElementById(setting.name + '_switch').appendChild(document.createElement('div')).classList.add('switch_handle');
-  document.getElementById(setting.name + '_switch').addEventListener('click', () => { toggleSwitch(setting) })
+  const switchButton = document.getElementById(setting.name + '_switch');
+  switchButton.classList.add('switch');
+  switchButton.appendChild(document.createElement('div')).classList.add('switch_handle');
+  switchButton.addEventListener('click', () => { toggleSwitch(setting) })
   // eslint-disable-next-line no-unused-expressions
-  userPreferences[setting.setting_value] == false ? document.getElementById(setting.name + '_switch').classList.add('off') : null;
+  userPreferences[setting.setting_value] == false ? switchButton.classList.add('off') : null;
 }
 
 function createNumberBox(setting) {
   document.getElementById(setting.name).appendChild(document.createElement('input')).id = setting.name + '_number';
-  document.getElementById(setting.name + '_number').classList.add('number_box');
-  document.getElementById(setting.name + '_number').type = 'number';
-  document.getElementById(setting.name + '_number').addEventListener('blur', () => { setting.event() })
-  document.getElementById(setting.name + '_number').value = userPreferences[setting.setting_value];
+  const numberBox = document.getElementById(setting.name + '_number')
+  numberBox.classList.add('number_box');
+  numberBox.type = 'number';
+  numberBox.addEventListener('blur', () => { setting.event(setting.setting_value, numberBox.value) })
+  numberBox.value = userPreferences[setting.setting_value];
 }
 
 function createSettings() {
