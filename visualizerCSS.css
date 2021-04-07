@@ -339,6 +339,14 @@ input::-webkit-inner-spin-button {
     color:#aaaaaa;
 }
 
+.number_box:focus {
+    background-color: rgba(255,255,255,0.1);
+    border: 2px solid rgb(119, 158, 203);
+    border-radius: 10px;
+    top:18px;
+    right:78px;
+}
+
 .invertedImages{
     filter: invert(1);
 }

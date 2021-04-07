@@ -555,6 +555,7 @@ const settings = [
     type: 'number',
     setting_value: 'max_height',
     gpm_exclusive: false,
+    multiplier: 100,
     event: updateNumberSetting,
   },
   {
@@ -617,8 +618,8 @@ function createNumberBox(setting) {
   const numberBox = document.getElementById(setting.name + '_number')
   numberBox.classList.add('number_box');
   numberBox.type = 'number';
-  numberBox.addEventListener('blur', () => { setting.event(setting.setting_value, numberBox.value * 100) })
-  numberBox.value = userPreferences[setting.setting_value] / 100;
+  numberBox.addEventListener('blur', () => { setting.event(setting.setting_value, numberBox.value * setting.multiplier) })
+  numberBox.value = userPreferences[setting.setting_value] / setting.multiplier;
 }
 
 function createSettings() {
