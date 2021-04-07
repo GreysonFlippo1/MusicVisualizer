@@ -18,7 +18,7 @@ let userPreferences = {
   colorCycle: true,
   auto_connect: true,
   show_banner: true,
-  primary_color: null,
+  primary_color: 'white',
   max_height: 100,
   smoothingTimeConstant: 0,
   allow_youtube: true,
@@ -296,7 +296,7 @@ function drawBars() {
       }
       document.getElementById('bar' + i).style.left = (barWidth + barSpacing) * (i - 1) + 'px';
       document.getElementById('bar' + i).style.bottom = websiteConfig.bottom + 'px';
-      document.getElementById('bar' + i).style.backgroundColor = websiteConfig.color;
+      document.getElementById('bar' + i).style.backgroundColor = userPreferences.primary_color || websiteConfig.color;
     }
   } else {
     for (let i = barAmntTemp; i < barAmnt; i++) {
@@ -316,16 +316,37 @@ function removeBars() {
   vizReady = barAmnt;
 }
 
+let red = 255;
+let green = 0;
+let blue = 0;
+
+function cycleColor() {
+  if (red == 255) {
+    if (blue > 0) { blue--; } else { green++; }
+  }
+
+  if (green == 255) {
+    if (red > 0) { red--; } else { blue++; }
+  }
+
+  if (blue == 255) {
+    if (green > 0) { green--; } else { red++; }
+  }
+  return 'rgb(' + red + ',' + green + ',' + blue + ')';
+}
 
 function barVis() {
   const activeSource = findActiveAudioSource();
   mediaElements[activeSource].analyser.getByteFrequencyData(mediaElements[activeSource].frequencyData);
+  const barColor = userPreferences.colorCycle ? cycleColor() : userPreferences.primary_color;
   for (let i = 0; i < barAmnt; i++) {
     if (vizReady == barAmnt) {
+      const bar = document.getElementById('bar' + i)
       const formula = Math.ceil(Math.pow(i, 1.25));
       const frequencyData = mediaElements[activeSource].frequencyData[formula];
       const pop = ((frequencyData * frequencyData * frequencyData) / (255 * 255 * 255)) * ((window.innerHeight - websiteConfig.bottom) * 0.30) * (userPreferences.max_height / 100);
-      document.getElementById('bar' + i).style.height = pop + 'px';
+      bar.style.height = pop + 'px';
+      bar.style.backgroundColor = barColor;
     }
   }
 }
@@ -366,39 +387,17 @@ function toggleCircleViz() {
   }
 }
 
-
-
-let red = 255;
-let green = 0;
-let blue = 0;
-
 function waveVis() {
   const canvasCtx = document.getElementById('canvas1').getContext('2d');
   const WIDTH = window.innerWidth;
   const HEIGHT = window.innerHeight - websiteConfig.bottom;
-    if (websiteConfig.name == 'YouTube-Config') {
-      document.getElementById('content').onload = function() { console.log('Music Visualizer: YouTube'); };
-    }
-    if (userPreferences.colorCycle) {
-      if (red == 255) {
-        if (blue > 0) { blue--; } else { green++; }
-      }
-
-      if (green == 255) {
-        if (red > 0) { red--; } else { blue++; }
-      }
-
-      if (blue == 255) {
-        if (green > 0) { green--; } else { red++; }
-      }
-    }
     const activeSource = findActiveAudioSource();
     mediaElements[activeSource].analyser.getByteTimeDomainData(mediaElements[activeSource].dataArray);
     canvasCtx.width = WIDTH;
     canvasCtx.height = HEIGHT;
     canvasCtx.fillStyle = 'rgba(0, 0, 0, 1)';
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
-    canvasCtx.strokeStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
+    canvasCtx.strokeStyle = userPreferences.colorCycle ? cycleColor() : userPreferences.primary_color;
     canvasCtx.lineWidth = 3000 / window.innerHeight;
     canvasCtx.shadowColor = '#000';
     canvasCtx.shadowBlur = 1;
@@ -527,6 +526,11 @@ function updateNumberSetting(setting_value, value) {
   updateSettings({[setting_value]: value});
 }
 
+function updatePrimaryColor(value) {
+  const color = value === 'default' ? null : value;
+  updateSettings({primary_color: color});
+}
+
 // primary_color: null,
 // max_height: 100,
 // smoothingTimeConstant: 0,
@@ -553,16 +557,21 @@ const settings = [
     title: 'Height Multiplier',
     type: 'number',
     setting_value: 'max_height',
-    gpm_exclusive: false,
     multiplier: 100,
     event: updateNumberSetting,
   },
   {
     name: 'color_cycle',
-    title: 'Allow Waveform Color Cycling',
+    title: 'Color Cycling',
     type: 'toggle',
     setting_value: 'colorCycle',
-    gpm_exclusive: false,
+  },
+  {
+    name: 'primary_color',
+    title: 'Static Visualizer Color',
+    type: 'text',
+    setting_value: 'primary_color',
+    event: updatePrimaryColor,
   },
   {
     name: 'auto_connect',
@@ -621,15 +630,28 @@ function createNumberBox(setting) {
   numberBox.value = userPreferences[setting.setting_value] / setting.multiplier;
 }
 
+function createTextBox(setting) {
+  document.getElementById(setting.name).appendChild(document.createElement('input')).id = setting.name + '_text';
+  const textBox = document.getElementById(setting.name + '_text')
+  textBox.classList.add('number_box');
+  textBox.type = 'text';
+  textBox.addEventListener('blur', () => { setting.event(textBox.value) })
+  textBox.value = userPreferences[setting.setting_value] || 'default';
+}
+
 function createSettings() {
   settings.map(setting => {
     if ((websiteConfig.name == 'Google-Play-Music-Config' && setting.gpm_exclusive) || !setting.gpm_exclusive) {
       document.getElementById('settings_modal').appendChild(document.createElement('div')).id = setting.name;
       document.getElementById(setting.name).classList.add('setting');
       document.getElementById(setting.name).innerText = setting.title;
-      // eslint-disable-next-line brace-style
-      if (setting.type == 'toggle') { createToggle(setting) }
-      else if (setting.type == 'number') { createNumberBox(setting) }
+      if (setting.type == 'toggle') {
+        createToggle(setting)
+      } else if (setting.type == 'number') {
+        createNumberBox(setting)
+      } else if (setting.type == 'text') {
+        createTextBox(setting)
+      }
     }
   })
 }
