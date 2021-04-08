@@ -237,6 +237,7 @@ put css in here to reduce the amout of dom manipulation in the js file
 #settings_modal{
     width:50vw;
     margin-top:10vh;
+    margin-bottom: 10vh;
     background-color: #1a1a1a;
     border-radius: 40px;
     font-family:'Roboto', sans-serif;
