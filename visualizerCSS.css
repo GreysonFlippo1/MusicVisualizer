@@ -341,10 +341,39 @@ input::-webkit-inner-spin-button {
 
 .number_box:focus {
     background-color: rgba(255,255,255,0.1);
-    border: 2px solid rgb(119, 158, 203);
+    /* border: 2px solid rgb(119, 158, 203); */
     border-radius: 10px;
     top:18px;
     right:78px;
+}
+
+.more_button:hover {
+    background-color: #222222;
+}
+
+.color_sample {
+    position: absolute;
+    top: 20px;
+    right: 80px;
+    height: 42px;
+    width: 42px;
+    border-radius: 5px;
+}
+
+.more_button {
+    position: absolute;
+    top: 18px;
+    right: 80px;
+    height: 46px;
+    width: 200px;
+    padding-top: 2px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.more_button:hover {
+    cursor: pointer;
+    background-color: #222222;
 }
 
 .invertedImages{

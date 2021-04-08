@@ -494,7 +494,6 @@ function turnOffAllVisualizers() {
 // }
 
 function toggleSettings() {
-  console.log(document.getElementById('settings_modal_background').style.display == 'flex')
   if (document.getElementById('settings_modal_background').style.display == 'flex') {
     hideSettings()
   } else {
@@ -528,6 +527,16 @@ function updateNumberSetting(setting_value, value) {
 
 function updatePrimaryColor(value) {
   const color = value === 'default' ? null : value;
+  const colorSample = document.getElementById('primary_color_sample')
+  colorSample.classList.add('color_sample');
+  const getColor = (color) => {
+    if (!color || color === 'default') {
+      return '#ffffff'
+    } else {
+      return color
+    }
+  }
+  colorSample.style.backgroundColor = getColor(color)
   updateSettings({primary_color: color});
 }
 
@@ -571,6 +580,7 @@ const settings = [
     title: 'Static Visualizer Color',
     type: 'text',
     setting_value: 'primary_color',
+    custom_setting: primaryColor,
     event: updatePrimaryColor,
   },
   {
@@ -639,13 +649,42 @@ function createTextBox(setting) {
   textBox.value = userPreferences[setting.setting_value] || 'default';
 }
 
+function primaryColor() {
+  document.getElementById('primary_color').appendChild(document.createElement('div')).id = 'primary_color_sample';
+  const colorSample = document.getElementById('primary_color_sample')
+  colorSample.classList.add('color_sample');
+  const getColor = (color) => {
+    if (!color || color === 'default') {
+      return '#ffffff'
+    } else {
+      return color
+    }
+  }
+  colorSample.style.backgroundColor = getColor(userPreferences.primary_color)
+
+  // document.getElementById('primary_color').appendChild(document.createElement('div')).id = 'primary_color_button';
+  // const colorButton = document.getElementById('primary_color_button')
+  // colorButton.classList.add('more_button')
+  // colorButton.innerText = 'Change'
+
+  document.getElementById('primary_color').appendChild(document.createElement('input')).id = 'primary_color' + '_text';
+  const textBox = document.getElementById('primary_color' + '_text')
+  textBox.classList.add('number_box');
+  textBox.type = 'text';
+  textBox.addEventListener('blur', () => { updatePrimaryColor(textBox.value) })
+  textBox.value = userPreferences.primary_color || 'default';
+  textBox.style.right = '142px';
+}
+
 function createSettings() {
   settings.map(setting => {
     if ((websiteConfig.name == 'Google-Play-Music-Config' && setting.gpm_exclusive) || !setting.gpm_exclusive) {
       document.getElementById('settings_modal').appendChild(document.createElement('div')).id = setting.name;
       document.getElementById(setting.name).classList.add('setting');
       document.getElementById(setting.name).innerText = setting.title;
-      if (setting.type == 'toggle') {
+      if (setting.custom_setting) {
+        setting.custom_setting()
+      } else if (setting.type == 'toggle') {
         createToggle(setting)
       } else if (setting.type == 'number') {
         createNumberBox(setting)
