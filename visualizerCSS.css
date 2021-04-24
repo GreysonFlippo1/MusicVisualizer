@@ -165,22 +165,6 @@ put css in here to reduce the amout of dom manipulation in the js file
     transition: bottom .5s;
 }
 
-#artBackground{
-    position:fixed;
-    z-index:1000;
-    width:100%;
-    height:50%;
-    left:0px;
-    top:0px;
-    display:block;
-    background-color: #000000;
-    background-attachment: absolute;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    filter:grayscale(20%);
-}
-
 #backgroundShade{
     position:absolute;
     top:0px;
