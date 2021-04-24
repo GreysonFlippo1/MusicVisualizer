@@ -3,7 +3,7 @@
 // Ac130veterans@gmail.com
 // GreysonFlippo@gmail.com
 // created 6-6-2016 :)
-// updated 5-10-2020
+// updated 4-24-2021
 // https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
 let websiteConfig = {
@@ -14,15 +14,13 @@ let websiteConfig = {
 };
 
 let userPreferences = {
-  artClipping: true,
   colorCycle: true,
   auto_connect: true,
   show_banner: true,
-  primary_color: null,
-  max_height: 110,
+  primary_color: 'white',
+  max_height: 100,
   smoothingTimeConstant: 0,
   allow_youtube: true,
-  allow_google_music: true,
   allow_youtube_music: true,
   allow_other: false,
 };
@@ -49,15 +47,7 @@ function loaded() {
 
 //Defines correct profile based on webpage that is loaded
 function getCurrentPage(url) {
-  if (url.includes('play.google')) {
-    return {
-      name: 'Google-Play-Music-Config',
-      color: '#FF5722',
-      color2: '#ffffff',
-      fftUni: 16384,
-      bottom: 90,
-    };
-  } else if (url.includes('music.youtube')) {
+  if (url.includes('music.youtube')) {
     return {
       name: 'YouTube-Music-Config',
       color: '#FFFFFF',
@@ -155,68 +145,18 @@ function retireveSettings() {
 function updateSettings(settings) {
   userPreferences = {...userPreferences, ...settings};
   // eslint-disable-next-line no-undef
-  chrome.storage.local.set({...userPreferences}, function() {
-  });
-}
-
-function setAlbumArtClick() {
-  if (document.getElementById('playerBarArt')) {
-    document.getElementById('playerBarArt').addEventListener('click', toggleArtBackground);
-    document.getElementById('playerBarArt').style.cursor = 'pointer';
-    if (userPreferences.artClipping && document.getElementById('artBackground')) {
-      document.getElementById('artBackground').style.backgroundSize = 'cover';
-    } else if (document.getElementById('artBackground')) {
-      document.getElementById('artBackground').style.backgroundSize = 'contain';
-    }
-  }
-}
-
-function toggleArtBackground() {
-  if (!document.getElementById('artBackground')) {
-    document.body.appendChild(document.createElement('div')).id = 'artBackground';
-    document.getElementById('artBackground').style.display = 'none';
-  }
-  if (document.getElementById('artBackground').style.display == 'block') {
-    document.getElementById('artBackground').style.display = 'none';
-    const temp = websiteConfig.color;
-    websiteConfig.color = websiteConfig.color2;
-    websiteConfig.color2 = temp;
-  } else if (document.getElementById('artBackground').style.display == 'none') {
-    document.getElementById('artBackground').style.display = 'block';
-    const temp = websiteConfig.color;
-    websiteConfig.color = websiteConfig.color2;
-    websiteConfig.color2 = temp;
-  }
-  removeBars();
-}
-
-function updateArtWallpaperSource() {
-  let src1 = document.getElementById('playerBarArt').src;
-  const indexOfEquals = src1.indexOf('=');
-  src1 = src1.substring(0, indexOfEquals) + '=s' + 1024 + '-c-e100';
-  return src1;
+  chrome.storage.local.set({...userPreferences});
 }
 
 function updateGUI() {
   document.getElementById('canvas1').style.height = window.innerHeight - websiteConfig.bottom + 'px';
   document.getElementById('canvas1').setAttribute('height', window.innerHeight - websiteConfig.bottom);
   document.getElementById('canvas1').setAttribute('width', window.innerWidth);
-  if (websiteConfig.name == 'Google-Play-Music-Config') {
-    setAlbumArtClick();
-    if (document.getElementById('artBackground')) {
-      document.getElementById('artBackground').style.backgroundImage = `url(${updateArtWallpaperSource()})`;
-      document.getElementById('artBackground').style.height = window.innerHeight - websiteConfig.bottom + 'px';
-      document.getElementById('artBackground').innerHTML = `
-        <p id="wtitle1">${document.getElementById('currently-playing-title').innerHTML}</p>
-        <p id="wtitle2">${document.getElementsByClassName('player-artist')[0].innerHTML + ' - ' + document.getElementsByClassName('player-album')[0].innerHTML}</p>
-        <div id="backgroundShade"></div>`;
-    }
-  }
 }
 
 function findAudioSources() {
   const site = websiteConfig.name
-  const connect = (userPreferences.auto_connect && ((site === 'Google-Play-Music-Config' && userPreferences.allow_google_music) || (site === 'YouTube-Music-Config' && userPreferences.allow_youtube_music) || (site === 'YouTube-Config' && userPreferences.allow_youtube) || (site === 'Default-Config' && userPreferences.allow_other)))
+  const connect = (userPreferences.auto_connect && ((site === 'YouTube-Music-Config' && userPreferences.allow_youtube_music) || (site === 'YouTube-Config' && userPreferences.allow_youtube) || (site === 'Default-Config' && userPreferences.allow_other)))
   if (connect) {
     const prevMediaElementsLength = mediaElements.length;
     const audioElements = document.getElementsByTagName('audio');
@@ -297,7 +237,7 @@ function drawBars() {
       }
       document.getElementById('bar' + i).style.left = (barWidth + barSpacing) * (i - 1) + 'px';
       document.getElementById('bar' + i).style.bottom = websiteConfig.bottom + 'px';
-      document.getElementById('bar' + i).style.backgroundColor = websiteConfig.color;
+      document.getElementById('bar' + i).style.backgroundColor = userPreferences.primary_color || websiteConfig.color;
     }
   } else {
     for (let i = barAmntTemp; i < barAmnt; i++) {
@@ -317,16 +257,37 @@ function removeBars() {
   vizReady = barAmnt;
 }
 
+let red = 255;
+let green = 0;
+let blue = 0;
+
+function cycleColor() {
+  if (red == 255) {
+    if (blue > 0) { blue--; } else { green++; }
+  }
+
+  if (green == 255) {
+    if (red > 0) { red--; } else { blue++; }
+  }
+
+  if (blue == 255) {
+    if (green > 0) { green--; } else { red++; }
+  }
+  return 'rgb(' + red + ',' + green + ',' + blue + ')';
+}
 
 function barVis() {
   const activeSource = findActiveAudioSource();
   mediaElements[activeSource].analyser.getByteFrequencyData(mediaElements[activeSource].frequencyData);
+  const barColor = userPreferences.colorCycle ? cycleColor() : userPreferences.primary_color;
   for (let i = 0; i < barAmnt; i++) {
     if (vizReady == barAmnt) {
+      const bar = document.getElementById('bar' + i)
       const formula = Math.ceil(Math.pow(i, 1.25));
       const frequencyData = mediaElements[activeSource].frequencyData[formula];
       const pop = ((frequencyData * frequencyData * frequencyData) / (255 * 255 * 255)) * ((window.innerHeight - websiteConfig.bottom) * 0.30) * (userPreferences.max_height / 100);
-      document.getElementById('bar' + i).style.height = pop + 'px';
+      bar.style.height = pop + 'px';
+      bar.style.backgroundColor = barColor;
     }
   }
 }
@@ -367,39 +328,17 @@ function toggleCircleViz() {
   }
 }
 
-
-
-let red = 255;
-let green = 0;
-let blue = 0;
-
 function waveVis() {
   const canvasCtx = document.getElementById('canvas1').getContext('2d');
   const WIDTH = window.innerWidth;
   const HEIGHT = window.innerHeight - websiteConfig.bottom;
-    if (websiteConfig.name == 'YouTube-Config') {
-      document.getElementById('content').onload = function() { console.log('Music Visualizer: YouTube'); };
-    }
-    if (userPreferences.colorCycle) {
-      if (red == 255) {
-        if (blue > 0) { blue--; } else { green++; }
-      }
-
-      if (green == 255) {
-        if (red > 0) { red--; } else { blue++; }
-      }
-
-      if (blue == 255) {
-        if (green > 0) { green--; } else { red++; }
-      }
-    }
     const activeSource = findActiveAudioSource();
     mediaElements[activeSource].analyser.getByteTimeDomainData(mediaElements[activeSource].dataArray);
     canvasCtx.width = WIDTH;
     canvasCtx.height = HEIGHT;
     canvasCtx.fillStyle = 'rgba(0, 0, 0, 1)';
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
-    canvasCtx.strokeStyle = 'rgb(' + red + ',' + green + ',' + blue + ')';
+    canvasCtx.strokeStyle = userPreferences.colorCycle ? cycleColor() : userPreferences.primary_color;
     canvasCtx.lineWidth = 3000 / window.innerHeight;
     canvasCtx.shadowColor = '#000';
     canvasCtx.shadowBlur = 1;
@@ -414,7 +353,7 @@ function waveVis() {
     let lasty = HEIGHT / 2;
 
     for (let i = mediaElements[activeSource].bufferLength / 2; i < mediaElements[activeSource].bufferLength; i++) {
-      const v = mediaElements[activeSource].dataArray[i] / 128.0;
+      const v = (((mediaElements[activeSource].dataArray[i] / 128.0) - 1) * (userPreferences.max_height / 100)) + 1;
       const radius2 = radius1 + (v * v * 150) * (HEIGHT / 1500);
       const y = v * HEIGHT / 2;
       if (visualizerToggles[2]) {
@@ -460,15 +399,6 @@ function toggleAmbienceViz() {
   }
 }
 
-
-// function toggleMenu() {
-//   if (document.getElementById('Menu_Background').style.display == 'flex') {
-//     document.getElementById('Menu_Background').style.display = 'none';
-//   } else {
-//     document.getElementById('Menu_Background').style.display = 'flex';
-//   }
-// }
-
 function setActiveVisualizer(vizNum) {
   if (!visualizerToggles[vizNum]) {
     turnOffAllVisualizers();
@@ -488,15 +418,7 @@ function turnOffAllVisualizers() {
   }
 }
 
-// function invertImages(invert) {
-//   const images = document.getElementsByTagName('img');
-//   for (let i = 0; i < images.length; i++) {
-//     invert ? images[i].classList.add('invertedImages') : images[i].classList.remove('invertedImages');
-//   }
-// }
-
 function toggleSettings() {
-  console.log(document.getElementById('settings_modal_background').style.display == 'flex')
   if (document.getElementById('settings_modal_background').style.display == 'flex') {
     hideSettings()
   } else {
@@ -524,33 +446,58 @@ function toggleSwitch(setting) {
   updateSettings({[setting.setting_value]: newSetting});
 }
 
+function updateNumberSetting(setting_value, value) {
+  updateSettings({[setting_value]: value});
+}
+
+function updatePrimaryColor(value) {
+  const color = value === 'default' ? null : value;
+  const colorSample = document.getElementById('primary_color_sample')
+  colorSample.classList.add('color_sample');
+  const getColor = (color) => {
+    if (!color || color === 'default') {
+      return '#ffffff'
+    } else {
+      return color
+    }
+  }
+  colorSample.style.backgroundColor = getColor(color)
+  updateSettings({primary_color: color});
+}
+
 // primary_color: null,
-// max_height: 110,
+// max_height: 100,
 // smoothingTimeConstant: 0,
 // allow_other: false,
 
 // show_banner: true,
-// artClipping: true,
 // colorCycle: true,
 // auto_connect: true,
-// allow_google_music: true,
 // allow_youtube: true,
 // allow_youtube_music: true,
 
 const settings = [
   {
-    name: 'art_clipping',
-    title: 'Fullscreen Album Art',
-    type: 'toggle',
-    setting_value: 'artClipping',
-    gpm_exclusive: true,
+    name: 'max_height',
+    title: 'Height Multiplier',
+    type: 'number',
+    setting_value: 'max_height',
+    multiplier: 100,
+    event: updateNumberSetting,
   },
   {
     name: 'color_cycle',
-    title: 'Allow Waveform Color Cycling',
+    title: 'Color Cycling',
     type: 'toggle',
     setting_value: 'colorCycle',
-    gpm_exclusive: false,
+  },
+  {
+    name: 'primary_color',
+    title: 'Static Visualizer Color',
+    type: 'text',
+    setting_value: 'primary_color',
+    custom_setting: primaryColor,
+    event: updatePrimaryColor,
   },
   {
     name: 'auto_connect',
@@ -563,12 +510,6 @@ const settings = [
     title: 'Connect With YouTube Music',
     type: 'toggle',
     setting_value: 'allow_youtube_music',
-  },
-  {
-    name: 'allow_google_music',
-    title: 'Connect With Google Play Music',
-    type: 'toggle',
-    setting_value: 'allow_google_music',
   },
   {
     name: 'allow_youtube',
@@ -592,30 +533,72 @@ const settings = [
 
 function createToggle(setting) {
   document.getElementById(setting.name).appendChild(document.createElement('div')).id = setting.name + '_switch';
-  document.getElementById(setting.name + '_switch').classList.add('switch');
-  document.getElementById(setting.name + '_switch').appendChild(document.createElement('div')).classList.add('switch_handle');
-  document.getElementById(setting.name + '_switch').addEventListener('click', () => { toggleSwitch(setting) })
+  const switchButton = document.getElementById(setting.name + '_switch');
+  switchButton.classList.add('switch');
+  switchButton.appendChild(document.createElement('div')).classList.add('switch_handle');
+  switchButton.addEventListener('click', () => { toggleSwitch(setting) })
   // eslint-disable-next-line no-unused-expressions
-  userPreferences[setting.setting_value] == false ? document.getElementById(setting.name + '_switch').classList.add('off') : null;
+  userPreferences[setting.setting_value] == false ? switchButton.classList.add('off') : null;
 }
 
 function createNumberBox(setting) {
   document.getElementById(setting.name).appendChild(document.createElement('input')).id = setting.name + '_number';
-  document.getElementById(setting.name + '_number').classList.add('number_box');
-  document.getElementById(setting.name + '_number').type = 'number';
-  document.getElementById(setting.name + '_number').addEventListener('blur', () => { setting.event() })
-  document.getElementById(setting.name + '_number').value = userPreferences[setting.setting_value];
+  const numberBox = document.getElementById(setting.name + '_number')
+  numberBox.classList.add('number_box');
+  numberBox.type = 'number';
+  numberBox.addEventListener('blur', () => { setting.event(setting.setting_value, numberBox.value * setting.multiplier) })
+  numberBox.value = userPreferences[setting.setting_value] / setting.multiplier;
+}
+
+function createTextBox(setting) {
+  document.getElementById(setting.name).appendChild(document.createElement('input')).id = setting.name + '_text';
+  const textBox = document.getElementById(setting.name + '_text')
+  textBox.classList.add('number_box');
+  textBox.type = 'text';
+  textBox.addEventListener('blur', () => { setting.event(textBox.value) })
+  textBox.value = userPreferences[setting.setting_value] || 'default';
+}
+
+function primaryColor() {
+  document.getElementById('primary_color').appendChild(document.createElement('div')).id = 'primary_color_sample';
+  const colorSample = document.getElementById('primary_color_sample')
+  colorSample.classList.add('color_sample');
+  const getColor = (color) => {
+    if (!color || color === 'default') {
+      return '#ffffff'
+    } else {
+      return color
+    }
+  }
+  colorSample.style.backgroundColor = getColor(userPreferences.primary_color)
+
+  // document.getElementById('primary_color').appendChild(document.createElement('div')).id = 'primary_color_button';
+  // const colorButton = document.getElementById('primary_color_button')
+  // colorButton.classList.add('more_button')
+  // colorButton.innerText = 'Change'
+
+  document.getElementById('primary_color').appendChild(document.createElement('input')).id = 'primary_color' + '_text';
+  const textBox = document.getElementById('primary_color' + '_text')
+  textBox.classList.add('number_box');
+  textBox.type = 'text';
+  textBox.addEventListener('blur', () => { updatePrimaryColor(textBox.value) })
+  textBox.value = userPreferences.primary_color || 'default';
+  textBox.style.right = '142px';
 }
 
 function createSettings() {
   settings.map(setting => {
-    if ((websiteConfig.name == 'Google-Play-Music-Config' && setting.gpm_exclusive) || !setting.gpm_exclusive) {
-      document.getElementById('settings_modal').appendChild(document.createElement('div')).id = setting.name;
-      document.getElementById(setting.name).classList.add('setting');
-      document.getElementById(setting.name).innerText = setting.title;
-      // eslint-disable-next-line brace-style
-      if (setting.type == 'toggle') { createToggle(setting) }
-      else if (setting.type == 'number') { createNumberBox(setting) }
+    document.getElementById('settings_modal').appendChild(document.createElement('div')).id = setting.name;
+    document.getElementById(setting.name).classList.add('setting');
+    document.getElementById(setting.name).innerText = setting.title;
+    if (setting.custom_setting) {
+      setting.custom_setting()
+    } else if (setting.type == 'toggle') {
+      createToggle(setting)
+    } else if (setting.type == 'number') {
+      createNumberBox(setting)
+    } else if (setting.type == 'text') {
+      createTextBox(setting)
     }
   })
 }

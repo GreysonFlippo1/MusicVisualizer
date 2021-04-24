@@ -1,12 +1,12 @@
 {
   "manifest_version": 2,
-  "name": "Music Visualizer for Google Play™ Music",
-  "version": "9.0",
-  "description": "Music Visualizer for Google Play Music and YouTube. Press ' f2 ' once loaded into a webpage to start visualizing!",
+  "name": "Music Visualizer for YouTube™ Music",
+  "version": "10.0",
+  "description": "Music Visualizer for YouTube Music and YouTube Video. Press ' F2 ' once loaded into a webpage to start visualizing!",
   "web_accessible_resources": ["Bar_Viz.png","Wave_Viz.png","Circle_Viz.png","Ambient_Viz.png"],
   "icons": {                   
     "48": "icon48.png",                   
-    "128": "icon128.jpg"
+    "128": "icon128.png"
   },
  "browser_action": {
     "default_icon": {                   
@@ -15,7 +15,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://play.google.com/music/*" , "https://www.youtube.com/*", "https://music.youtube.com/*"],
+      "matches": ["https://www.youtube.com/*", "https://music.youtube.com/*"],
       "css":["visualizerCSS.css"],
       "js": ["visualizer.js"]
     }

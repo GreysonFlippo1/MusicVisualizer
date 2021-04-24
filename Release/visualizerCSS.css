@@ -165,22 +165,6 @@ put css in here to reduce the amout of dom manipulation in the js file
     transition: bottom .5s;
 }
 
-#artBackground{
-    position:fixed;
-    z-index:1000;
-    width:100%;
-    height:50%;
-    left:0px;
-    top:0px;
-    display:block;
-    background-color: #000000;
-    background-attachment: absolute;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    filter:grayscale(20%);
-}
-
 #backgroundShade{
     position:absolute;
     top:0px;
@@ -237,6 +221,7 @@ put css in here to reduce the amout of dom manipulation in the js file
 #settings_modal{
     width:50vw;
     margin-top:10vh;
+    margin-bottom: 10vh;
     background-color: #1a1a1a;
     border-radius: 40px;
     font-family:'Roboto', sans-serif;
@@ -337,6 +322,43 @@ input::-webkit-inner-spin-button {
     border:0px solid rgba(0,0,0,0);
     background-color: rgba(0,0,0,0);
     color:#aaaaaa;
+}
+
+.number_box:focus {
+    background-color: rgba(255,255,255,0.1);
+    /* border: 2px solid rgb(119, 158, 203); */
+    border-radius: 10px;
+    top:18px;
+    right:78px;
+}
+
+.more_button:hover {
+    background-color: #222222;
+}
+
+.color_sample {
+    position: absolute;
+    top: 20px;
+    right: 80px;
+    height: 42px;
+    width: 42px;
+    border-radius: 5px;
+}
+
+.more_button {
+    position: absolute;
+    top: 18px;
+    right: 80px;
+    height: 46px;
+    width: 200px;
+    padding-top: 2px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.more_button:hover {
+    cursor: pointer;
+    background-color: #222222;
 }
 
 .invertedImages{
