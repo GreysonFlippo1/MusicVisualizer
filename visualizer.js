@@ -3,7 +3,7 @@
 // Ac130veterans@gmail.com
 // GreysonFlippo@gmail.com
 // created 6-6-2016 :)
-// updated 4-6-2021
+// updated 4-24-2021
 // https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
 let websiteConfig = {
@@ -14,7 +14,6 @@ let websiteConfig = {
 };
 
 let userPreferences = {
-  artClipping: true,
   colorCycle: true,
   auto_connect: true,
   show_banner: true,
@@ -22,7 +21,6 @@ let userPreferences = {
   max_height: 100,
   smoothingTimeConstant: 0,
   allow_youtube: true,
-  allow_google_music: true,
   allow_youtube_music: true,
   allow_other: false,
 };
@@ -49,15 +47,7 @@ function loaded() {
 
 //Defines correct profile based on webpage that is loaded
 function getCurrentPage(url) {
-  if (url.includes('play.google')) {
-    return {
-      name: 'Google-Play-Music-Config',
-      color: '#FF5722',
-      color2: '#ffffff',
-      fftUni: 16384,
-      bottom: 90,
-    };
-  } else if (url.includes('music.youtube')) {
+  if (url.includes('music.youtube')) {
     return {
       name: 'YouTube-Music-Config',
       color: '#FFFFFF',
@@ -158,64 +148,15 @@ function updateSettings(settings) {
   chrome.storage.local.set({...userPreferences});
 }
 
-function setAlbumArtClick() {
-  if (document.getElementById('playerBarArt')) {
-    document.getElementById('playerBarArt').addEventListener('click', toggleArtBackground);
-    document.getElementById('playerBarArt').style.cursor = 'pointer';
-    if (userPreferences.artClipping && document.getElementById('artBackground')) {
-      document.getElementById('artBackground').style.backgroundSize = 'cover';
-    } else if (document.getElementById('artBackground')) {
-      document.getElementById('artBackground').style.backgroundSize = 'contain';
-    }
-  }
-}
-
-function toggleArtBackground() {
-  if (!document.getElementById('artBackground')) {
-    document.body.appendChild(document.createElement('div')).id = 'artBackground';
-    document.getElementById('artBackground').style.display = 'none';
-  }
-  if (document.getElementById('artBackground').style.display == 'block') {
-    document.getElementById('artBackground').style.display = 'none';
-    const temp = websiteConfig.color;
-    websiteConfig.color = websiteConfig.color2;
-    websiteConfig.color2 = temp;
-  } else if (document.getElementById('artBackground').style.display == 'none') {
-    document.getElementById('artBackground').style.display = 'block';
-    const temp = websiteConfig.color;
-    websiteConfig.color = websiteConfig.color2;
-    websiteConfig.color2 = temp;
-  }
-  removeBars();
-}
-
-function updateArtWallpaperSource() {
-  let src1 = document.getElementById('playerBarArt').src;
-  const indexOfEquals = src1.indexOf('=');
-  src1 = src1.substring(0, indexOfEquals) + '=s' + 1024 + '-c-e100';
-  return src1;
-}
-
 function updateGUI() {
   document.getElementById('canvas1').style.height = window.innerHeight - websiteConfig.bottom + 'px';
   document.getElementById('canvas1').setAttribute('height', window.innerHeight - websiteConfig.bottom);
   document.getElementById('canvas1').setAttribute('width', window.innerWidth);
-  if (websiteConfig.name == 'Google-Play-Music-Config') {
-    setAlbumArtClick();
-    if (document.getElementById('artBackground')) {
-      document.getElementById('artBackground').style.backgroundImage = `url(${updateArtWallpaperSource()})`;
-      document.getElementById('artBackground').style.height = window.innerHeight - websiteConfig.bottom + 'px';
-      document.getElementById('artBackground').innerHTML = `
-        <p id="wtitle1">${document.getElementById('currently-playing-title').innerHTML}</p>
-        <p id="wtitle2">${document.getElementsByClassName('player-artist')[0].innerHTML + ' - ' + document.getElementsByClassName('player-album')[0].innerHTML}</p>
-        <div id="backgroundShade"></div>`;
-    }
-  }
 }
 
 function findAudioSources() {
   const site = websiteConfig.name
-  const connect = (userPreferences.auto_connect && ((site === 'Google-Play-Music-Config' && userPreferences.allow_google_music) || (site === 'YouTube-Music-Config' && userPreferences.allow_youtube_music) || (site === 'YouTube-Config' && userPreferences.allow_youtube) || (site === 'Default-Config' && userPreferences.allow_other)))
+  const connect = (userPreferences.auto_connect && ((site === 'YouTube-Music-Config' && userPreferences.allow_youtube_music) || (site === 'YouTube-Config' && userPreferences.allow_youtube) || (site === 'Default-Config' && userPreferences.allow_other)))
   if (connect) {
     const prevMediaElementsLength = mediaElements.length;
     const audioElements = document.getElementsByTagName('audio');
@@ -458,15 +399,6 @@ function toggleAmbienceViz() {
   }
 }
 
-
-// function toggleMenu() {
-//   if (document.getElementById('Menu_Background').style.display == 'flex') {
-//     document.getElementById('Menu_Background').style.display = 'none';
-//   } else {
-//     document.getElementById('Menu_Background').style.display = 'flex';
-//   }
-// }
-
 function setActiveVisualizer(vizNum) {
   if (!visualizerToggles[vizNum]) {
     turnOffAllVisualizers();
@@ -485,13 +417,6 @@ function turnOffAllVisualizers() {
     }
   }
 }
-
-// function invertImages(invert) {
-//   const images = document.getElementsByTagName('img');
-//   for (let i = 0; i < images.length; i++) {
-//     invert ? images[i].classList.add('invertedImages') : images[i].classList.remove('invertedImages');
-//   }
-// }
 
 function toggleSettings() {
   if (document.getElementById('settings_modal_background').style.display == 'flex') {
@@ -546,21 +471,12 @@ function updatePrimaryColor(value) {
 // allow_other: false,
 
 // show_banner: true,
-// artClipping: true,
 // colorCycle: true,
 // auto_connect: true,
-// allow_google_music: true,
 // allow_youtube: true,
 // allow_youtube_music: true,
 
 const settings = [
-  {
-    name: 'art_clipping',
-    title: 'Fullscreen Album Art',
-    type: 'toggle',
-    setting_value: 'artClipping',
-    gpm_exclusive: true,
-  },
   {
     name: 'max_height',
     title: 'Height Multiplier',
@@ -594,12 +510,6 @@ const settings = [
     title: 'Connect With YouTube Music',
     type: 'toggle',
     setting_value: 'allow_youtube_music',
-  },
-  {
-    name: 'allow_google_music',
-    title: 'Connect With Google Play Music',
-    type: 'toggle',
-    setting_value: 'allow_google_music',
   },
   {
     name: 'allow_youtube',
@@ -678,19 +588,17 @@ function primaryColor() {
 
 function createSettings() {
   settings.map(setting => {
-    if ((websiteConfig.name == 'Google-Play-Music-Config' && setting.gpm_exclusive) || !setting.gpm_exclusive) {
-      document.getElementById('settings_modal').appendChild(document.createElement('div')).id = setting.name;
-      document.getElementById(setting.name).classList.add('setting');
-      document.getElementById(setting.name).innerText = setting.title;
-      if (setting.custom_setting) {
-        setting.custom_setting()
-      } else if (setting.type == 'toggle') {
-        createToggle(setting)
-      } else if (setting.type == 'number') {
-        createNumberBox(setting)
-      } else if (setting.type == 'text') {
-        createTextBox(setting)
-      }
+    document.getElementById('settings_modal').appendChild(document.createElement('div')).id = setting.name;
+    document.getElementById(setting.name).classList.add('setting');
+    document.getElementById(setting.name).innerText = setting.title;
+    if (setting.custom_setting) {
+      setting.custom_setting()
+    } else if (setting.type == 'toggle') {
+      createToggle(setting)
+    } else if (setting.type == 'number') {
+      createNumberBox(setting)
+    } else if (setting.type == 'text') {
+      createTextBox(setting)
     }
   })
 }
