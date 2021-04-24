@@ -4,7 +4,7 @@ https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjh
 Feel free to download the source files from here and change around what you like and run the extension as a developer extension.
 All dependent files for the extension to run are present. 
 
-Current Relase Version: 8.0
+Current Relase Version: 10.0
 
 developer Notes:
 things to change-
