@@ -3,7 +3,7 @@
 // Ac130veterans@gmail.com
 // GreysonFlippo@gmail.com
 // created 6-6-2016 :)
-// updated 4-24-2021
+// updated 4-25-2021
 // https://chrome.google.com/webstore/detail/music-visualizer-for-goog/ofhohcappnjhojpboeamfijglinngdnb
 
 let websiteConfig = {
@@ -462,19 +462,8 @@ function updatePrimaryColor(value) {
     }
   }
   colorSample.style.backgroundColor = getColor(color)
-  updateSettings({primary_color: color});
+  updateSettings({primary_color: getColor(color)});
 }
-
-// primary_color: null,
-// max_height: 100,
-// smoothingTimeConstant: 0,
-// allow_other: false,
-
-// show_banner: true,
-// colorCycle: true,
-// auto_connect: true,
-// allow_youtube: true,
-// allow_youtube_music: true,
 
 const settings = [
   {
