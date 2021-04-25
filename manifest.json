@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Music Visualizer for YouTube™ Music",
-  "version": "10.0",
+  "version": "10.1",
   "description": "Music Visualizer for YouTube Music and YouTube Video. Press ' F2 ' once loaded into a webpage to start visualizing!",
   "web_accessible_resources": ["Bar_Viz.png","Wave_Viz.png","Circle_Viz.png","Ambient_Viz.png"],
   "icons": {                   
