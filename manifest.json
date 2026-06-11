@@ -1,14 +1,13 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Music Visualizer for YouTube™ Music",
   "version": "10.1",
   "description": "Music Visualizer for YouTube Music and YouTube Video. Press ' F2 ' once loaded into a webpage to start visualizing!",
-  "web_accessible_resources": ["Bar_Viz.png","Wave_Viz.png","Circle_Viz.png","Ambient_Viz.png"],
   "icons": {                   
     "48": "icon48.png",                   
     "128": "icon128.png"
   },
- "browser_action": {
+  "action": {
     "default_icon": {                   
       "48": "icon48.png"    
     }
@@ -16,11 +15,17 @@
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*", "https://music.youtube.com/*"],
-      "css":["visualizerCSS.css"],
+      "css": ["visualizerCSS.css"],
       "js": ["visualizer.js"]
     }
   ],
   "permissions": [
     "storage"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["Bar_Viz.png", "Wave_Viz.png", "Circle_Viz.png", "Ambient_Viz.png"],
+      "matches": ["https://www.youtube.com/*", "https://music.youtube.com/*"]
+    }
   ]
 }
