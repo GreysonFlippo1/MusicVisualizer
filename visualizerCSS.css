@@ -87,6 +87,7 @@ put css in here to reduce the amout of dom manipulation in the js file
     background-color: #ffffff;
     z-index: 1502;
     opacity: 0.8;
+    pointer-events: none;
 }
 
 #canvas1{
